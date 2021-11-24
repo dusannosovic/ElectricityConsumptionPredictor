@@ -1,0 +1,11 @@
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\PredictionModel\bin\Debug\PredictionModel.dll.config
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\PredictionModel\bin\Debug\PredictionModel.dll
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\PredictionModel\bin\Debug\PredictionModel.pdb
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\PredictionModel\bin\Debug\EntityFramework.dll
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\PredictionModel\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\PredictionModel\bin\Debug\EntityFramework.xml
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\PredictionModel\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\PredictionModel\obj\Debug\PredictionModel.csproj.CoreCompileInputs.cache
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\PredictionModel\obj\Debug\PredictionModel.csproj.CopyComplete
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\PredictionModel\obj\Debug\PredictionModel.dll
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\PredictionModel\obj\Debug\PredictionModel.pdb

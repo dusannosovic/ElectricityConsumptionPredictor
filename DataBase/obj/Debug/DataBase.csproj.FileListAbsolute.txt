@@ -1,0 +1,17 @@
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\bin\Debug\DataBase.dll
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\bin\Debug\DataBase.pdb
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\obj\Debug\DataBase.csproj.CoreCompileInputs.cache
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\obj\Debug\DataBase.dll
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\obj\Debug\DataBase.pdb
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\bin\Debug\DataBase.dll.config
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\bin\Debug\EntityFramework.dll
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\bin\Debug\EntityFramework.xml
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\obj\Debug\DataBase.csprojAssemblyReference.cache
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\obj\Debug\DataBase.csproj.CopyComplete
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\obj\Debug\DataBase.Migrations.InitialCreate.resources
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\obj\Debug\DataBase.csproj.GenerateResource.cache
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\obj\Debug\DataBase.Migrations.MigrationForVoltage.resources
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\obj\Debug\DataBase.Migrations.ChangeTableName.resources
+C:\Users\Dusan\source\repos\ProjekatInteligentniInfSis\DataBase\obj\Debug\DataBase.Migrations.ChangeTableNameToTableEntities.resources
