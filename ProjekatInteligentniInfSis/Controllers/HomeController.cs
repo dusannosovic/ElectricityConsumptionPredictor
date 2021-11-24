@@ -4,22 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
 
 namespace ProjekatInteligentniInfSis.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ApiController
     {
-        public ActionResult Index()
+        [Route("api/Home/GetTicket")]
+        [HttpGet]
+        public string GetTicket()
         {
-            ViewBag.Title = "Home Page";
-            List<TableEntity> tables = new List<TableEntity>();
-            tables.Add(new TableEntity("35", DateTime.Now));
-            tables.Add(new TableEntity("48", DateTime.Now));
-            CrudOperations.AddEntites(tables);
-            
-
-            return View();
+            return "dusan";
         }
        /* public ActionResult Add()
         {
