@@ -40,9 +40,16 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -69,9 +76,36 @@
     <Compile Include="Migrations\202111240930001_ChangeTableNameToTableEntities.designer.cs">
       <DependentUpon>202111240930001_ChangeTableNameToTableEntities.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112011012278_firstdatabasewithloadsunriseandweather.cs" />
+    <Compile Include="Migrations\202112011012278_firstdatabasewithloadsunriseandweather.designer.cs">
+      <DependentUpon>202112011012278_firstdatabasewithloadsunriseandweather.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112011152262_addindexweather.cs" />
+    <Compile Include="Migrations\202112011152262_addindexweather.designer.cs">
+      <DependentUpon>202112011152262_addindexweather.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112011156569_nullable.cs" />
+    <Compile Include="Migrations\202112011156569_nullable.designer.cs">
+      <DependentUpon>202112011156569_nullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112011200118_datetime2.cs" />
+    <Compile Include="Migrations\202112011200118_datetime2.designer.cs">
+      <DependentUpon>202112011200118_datetime2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112011202493_ID.cs" />
+    <Compile Include="Migrations\202112011202493_ID.designer.cs">
+      <DependentUpon>202112011202493_ID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112011329393_idload.cs" />
+    <Compile Include="Migrations\202112011329393_idload.designer.cs">
+      <DependentUpon>202112011329393_idload.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DataBaseContext.cs" />
+    <Compile Include="Model\Load.cs" />
+    <Compile Include="Model\SunriseSunset.cs" />
     <Compile Include="Model\TableEntity.cs" />
+    <Compile Include="Model\Weather.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +124,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111240930001_ChangeTableNameToTableEntities.resx">
       <DependentUpon>202111240930001_ChangeTableNameToTableEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112011012278_firstdatabasewithloadsunriseandweather.resx">
+      <DependentUpon>202112011012278_firstdatabasewithloadsunriseandweather.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112011152262_addindexweather.resx">
+      <DependentUpon>202112011152262_addindexweather.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112011156569_nullable.resx">
+      <DependentUpon>202112011156569_nullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112011200118_datetime2.resx">
+      <DependentUpon>202112011200118_datetime2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112011202493_ID.resx">
+      <DependentUpon>202112011202493_ID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112011329393_idload.resx">
+      <DependentUpon>202112011329393_idload.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

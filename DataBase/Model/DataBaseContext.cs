@@ -16,11 +16,16 @@ namespace DataBase.Model
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TableEntity>()
-                .ToTable("TableEntities");
-                
+            modelBuilder.Entity<Load>().ToTable("LoadTable");
+            modelBuilder.Entity<SunriseSunset>().ToTable("SunriseSunsetTable");
+            modelBuilder.Entity<Weather>().ToTable("WeatherTable");
+            modelBuilder.Properties<DateTime>().Configure(c => c.HasColumnType("datetime2"));
         }
 
-        public DbSet<TableEntity> TableEntities { get; set; }
+        public DbSet<Weather> WeatherTable { get; set; }
+        public DbSet<Load> LoadTable { get; set; }
+        public DbSet<SunriseSunset> SunriseSunsetTable { get; set; }
+
+
     }
 }
