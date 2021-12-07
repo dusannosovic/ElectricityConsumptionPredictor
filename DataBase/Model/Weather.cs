@@ -23,7 +23,7 @@ namespace DataBase.Model
         public Int32? Humidity { get; set; }
         public String WindDirection { get; set; }
         public Int32? WindSpeed { get; set; }
-        public String Clouds { get; set; }
+        public Double? Clouds { get; set; }
         public Double? HVisibility { get; set; }
         public Double? DTemperature { get; set; }
     }
