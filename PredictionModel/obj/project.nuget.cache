@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "dgSpecHash": "KaX/xAoOulgWqAs8XdFladiU3m7U4es2e0AyKMRmIAGZxsZhOpM0EXg4750tWT5EXJ6tFFpcKgoihlpSD4qFzA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\PredictionModel\\PredictionModel.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Dusan\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\fody\\6.6.0\\fody.6.6.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\google.protobuf\\3.11.3\\google.protobuf.3.11.3.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\keras.net\\3.7.5\\keras.net.3.7.5.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\methodboundaryaspect.fody\\2.0.144\\methodboundaryaspect.fody.2.0.144.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\6.0.0\\microsoft.extensions.dependencyinjection.6.0.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\numpy.bare\\3.7.1.26\\numpy.bare.3.7.1.26.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\pandas.net\\0.2.0\\pandas.net.0.2.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\protobuf.text\\0.5.0\\protobuf.text.0.5.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\pythonnet_netstandard_py37_win\\2.5.1\\pythonnet_netstandard_py37_win.2.5.1.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\pythonnet_netstandard_py38_win\\2.5.1\\pythonnet_netstandard_py38_win.2.5.1.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\scisharp.tensorflow.redist\\2.6.0\\scisharp.tensorflow.redist.2.6.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\serilog\\2.10.0\\serilog.2.10.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\serilog.sinks.console\\4.0.1\\serilog.sinks.console.4.0.1.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\system.buffers\\4.4.0\\system.buffers.4.4.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\system.memory\\4.5.2\\system.memory.4.5.2.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\system.numerics.vectors\\4.4.0\\system.numerics.vectors.4.4.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\tensorflow.net\\0.60.5\\tensorflow.net.0.60.5.nupkg.sha512"
+  ],
+  "logs": []
+}

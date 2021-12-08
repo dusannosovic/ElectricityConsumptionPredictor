@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using PredictionModel;
 
 namespace ProjekatInteligentniInfSis.Controllers
 {
@@ -20,8 +21,8 @@ namespace ProjekatInteligentniInfSis.Controllers
         [HttpGet]
         public string GetTable()
         {
-            DataTable dt = Traning.CreateDataTableFromObjects<Weather>(CrudOperations.GetAllWeather());
-
+            Traning tr = new Traning();
+            tr.TrainModel();
             return "uspesno";
         }
     }

@@ -1,0 +1,128 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\PredictionModel\\PredictionModel.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\DataBase\\DataBase.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\DataBase\\DataBase.csproj",
+        "projectName": "DataBase",
+        "projectPath": "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\DataBase\\DataBase.csproj",
+        "frameworks": {
+          "net461": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net461": {}
+      }
+    },
+    "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\PredictionModel\\PredictionModel.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\PredictionModel\\PredictionModel.csproj",
+        "projectName": "PredictionModel",
+        "projectPath": "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\PredictionModel\\PredictionModel.csproj",
+        "packagesPath": "C:\\Users\\Dusan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\PredictionModel\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "configFilePaths": [
+          "C:\\Users\\Dusan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\ServiceFabricSDK.config"
+        ],
+        "originalTargetFrameworks": [
+          "net461"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\Microsoft SDKs\\Service Fabric\\packages": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net461": {
+            "projectReferences": {
+              "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\DataBase\\DataBase.csproj": {
+                "projectPath": "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\DataBase\\DataBase.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net461": {
+          "dependencies": {
+            "EntityFramework": {
+              "target": "Package",
+              "version": "[6.4.4, )"
+            },
+            "Fody": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.6.0, )"
+            },
+            "Keras.NET": {
+              "target": "Package",
+              "version": "[3.7.5, )"
+            },
+            "MethodBoundaryAspect.Fody": {
+              "target": "Package",
+              "version": "[2.0.144, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Numpy.Bare": {
+              "target": "Package",
+              "version": "[3.7.1.26, )"
+            },
+            "Pandas.NET": {
+              "target": "Package",
+              "version": "[0.2.0, )"
+            },
+            "Protobuf.Text": {
+              "target": "Package",
+              "version": "[0.5.0, )"
+            },
+            "SciSharp.TensorFlow.Redist": {
+              "target": "Package",
+              "version": "[2.6.0, )"
+            },
+            "Serilog.Sinks.Console": {
+              "target": "Package",
+              "version": "[4.0.1, )"
+            },
+            "TensorFlow.NET": {
+              "target": "Package",
+              "version": "[0.60.5, )"
+            },
+            "pythonnet_netstandard_py37_win": {
+              "target": "Package",
+              "version": "[2.5.1, )"
+            },
+            "pythonnet_netstandard_py38_win": {
+              "target": "Package",
+              "version": "[2.5.1, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

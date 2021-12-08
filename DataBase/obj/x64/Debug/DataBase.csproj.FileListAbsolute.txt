@@ -27,3 +27,4 @@ C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Deb
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.dll
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.pdb
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.Migrations.doublecloud.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.csproj.AssemblyReference.cache
