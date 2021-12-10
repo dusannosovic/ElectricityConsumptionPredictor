@@ -204,6 +204,5 @@ C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\ProjekatInteligentni
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\ProjekatInteligentniInfSis\bin\Python.Runtime.dll
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\ProjekatInteligentniInfSis\bin\Python.Runtime.xml
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\ProjekatInteligentniInfSis\obj\x64\Debug\ProjekatInteligentniInfSis.csproj.AssemblyReference.cache
-C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\ProjekatInteligentniInfSis\bin\Pandas.NET.dll
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\ProjekatInteligentniInfSis\bin\Keras.dll
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\ProjekatInteligentniInfSis\bin\Numpy.Bare.dll

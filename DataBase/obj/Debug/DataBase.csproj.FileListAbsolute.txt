@@ -28,7 +28,6 @@ C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\bin\Debug\E
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\bin\Debug\ExcelDataReader.xml
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\bin\Debug\ExcelDataReader.DataSet.pdb
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\bin\Debug\ExcelDataReader.DataSet.xml
-C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.csprojAssemblyReference.cache
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.InitialCreate.resources
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.MigrationForVoltage.resources
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.ChangeTableName.resources
@@ -45,3 +44,7 @@ C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\D
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.ID.resources
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.idload.resources
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.doublecloud.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.csproj.AssemblyReference.cache
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.loadandweatherinsametable.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.loadinweather.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.loadinweather1.resources

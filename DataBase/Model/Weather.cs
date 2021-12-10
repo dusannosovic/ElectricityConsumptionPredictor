@@ -15,7 +15,7 @@ namespace DataBase.Model
         }
         [Key]
         public int Id { get; set; }
-        public DateTime? LocalTime { get; set; }
+        public DateTime LocalTime { get; set; }
         public Double? Temperature { get; set; }
         public Double? APressure { get; set; }
         public Double? Pressure { get; set; }
@@ -26,5 +26,6 @@ namespace DataBase.Model
         public Double? Clouds { get; set; }
         public Double? HVisibility { get; set; }
         public Double? DTemperature { get; set; }
+        public Int32 Load { get; set; }
     }
 }

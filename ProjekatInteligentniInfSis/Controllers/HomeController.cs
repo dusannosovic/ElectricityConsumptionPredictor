@@ -56,9 +56,11 @@ namespace ProjekatInteligentniInfSis.Controllers
                             if(dsexcelRecords !=null && dsexcelRecords.Tables.Count > 0)
                             {
                                 DataTable dtWeather = dsexcelRecords.Tables["weather"];
-                                //int count = dtWeather.Rows.Count;
-                                CrudOperations.AddWeatherEntites(ParseWeather(dtWeather));
                                 DataTable dtLoad = dsexcelRecords.Tables["load"];
+                                Dictionary<DateTime, Int32> Loads = ParseLoadToDictionary(dtLoad);
+                                //int count = dtWeather.Rows.Count;
+                                CrudOperations.AddWeatherEntites(ParseWeather(dtWeather,Loads));
+
                                 //CrudOperations.AddLoadEntites(ParseLoad(dtLoad));
                             }
                             //CrudOperations.AddLoadEntites(loads);
@@ -75,7 +77,7 @@ namespace ProjekatInteligentniInfSis.Controllers
         public List<Load> ParseLoad(DataTable dt)
         {
             List<Load> loads = new List<Load>();
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i < 150; i++)
             {
                 Load load = new Load();
                 load.Id = i;
@@ -98,10 +100,38 @@ namespace ProjekatInteligentniInfSis.Controllers
             }
             return loads;
         }
-        public List<Weather> ParseWeather(DataTable dtWeather)
+        public Dictionary<DateTime,Int32> ParseLoadToDictionary(DataTable dt)
+        {
+            Dictionary<DateTime, Int32> Loads = new Dictionary<DateTime, Int32>();
+            DateTime time;
+            Int32 load;
+            for (int i = 1; i < 150; i++)
+            {
+                if (!string.IsNullOrEmpty(Convert.ToString(dt.Rows[i][0])))
+                {
+                    string DateShort = Convert.ToString(dt.Rows[i][0]);
+                    DateTime Temp = Convert.ToDateTime(Convert.ToString(dt.Rows[i][1]));
+                    string TimeFrom = Temp.TimeOfDay.ToString();
+                    string TimeTo = Convert.ToString(dt.Rows[i][2]);
+                    string[] DShort = DateShort.Split(' ');
+                    string[] TFSplit = TimeFrom.Split(':');
+                    string[] TTSplit = TimeTo.Split(' ');
+                    string[] Dshortsplited = DShort[0].Split('/');
+                    //string[] TfSpliteed = TFSplit[1].Split(':');
+                    string[] TTsplited = TTSplit[1].Split(':');
+                    time =  new DateTime(Int32.Parse(Dshortsplited[2]), Int32.Parse(Dshortsplited[0]), Int32.Parse(Dshortsplited[1]), Int32.Parse(TFSplit[0]), Int32.Parse(TFSplit[1]), 1);
+                    //load.TimeTo = new DateTime(Int32.Parse(Dshortsplited[2]), Int32.Parse(Dshortsplited[0]), Int32.Parse(Dshortsplited[1]), Int32.Parse(TTsplited[0]), Int32.Parse(TTsplited[1]), 0);
+                    load = Convert.ToInt32(dt.Rows[i][3].ToString());
+                    Loads.Add(time, load);
+                }
+            }
+            return Loads;
+
+        }
+        public List<Weather> ParseWeather(DataTable dtWeather, Dictionary<DateTime,Int32> loads)
         {
             List<Weather> weathers = new List<Weather>();
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i < 150; i++)
             {
                 if (!string.IsNullOrEmpty(Convert.ToString(dtWeather.Rows[i][0])))
                 {
@@ -117,7 +147,7 @@ namespace ProjekatInteligentniInfSis.Controllers
                         string[] split = a.Split(' ');
                         string[] date = split[0].Split('.');
                         string[] hours = split[1].Split(':');
-                        weather.LocalTime = new DateTime(Int32.Parse(date[2]), Int32.Parse(date[1]), Int32.Parse(date[0]), Int32.Parse(hours[0]), Int32.Parse(hours[1]), 0);
+                        weather.LocalTime = new DateTime(Int32.Parse(date[2]), Int32.Parse(date[1]), Int32.Parse(date[0]), Int32.Parse(hours[0]), Int32.Parse(hours[1]), 1);
 
                     }
                     if (!string.IsNullOrEmpty(dtWeather.Rows[i][1].ToString()))
@@ -147,6 +177,10 @@ namespace ProjekatInteligentniInfSis.Controllers
                     if (!string.IsNullOrEmpty(dtWeather.Rows[i][7].ToString()))
                     {
                         weather.WindSpeed = Convert.ToInt32(dtWeather.Rows[i][7]);
+                    }
+                    else
+                    {
+                        continue;
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dtWeather.Rows[i][10])))
                     {
@@ -359,6 +393,14 @@ namespace ProjekatInteligentniInfSis.Controllers
                     if (!string.IsNullOrEmpty(dtWeather.Rows[i][22].ToString()))
                     {
                         weather.DTemperature = Convert.ToDouble(dtWeather.Rows[i][22]);
+                    }
+                    if (loads.ContainsKey(weather.LocalTime))
+                    {
+                        weather.Load = loads[weather.LocalTime];
+                    }
+                    else
+                    {
+                        continue;
                     }
                     weathers.Add(weather);
                 }

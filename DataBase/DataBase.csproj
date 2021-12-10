@@ -122,6 +122,18 @@
     <Compile Include="Migrations\202112071045206_doublecloud.designer.cs">
       <DependentUpon>202112071045206_doublecloud.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112100903132_loadandweatherinsametable.cs" />
+    <Compile Include="Migrations\202112100903132_loadandweatherinsametable.designer.cs">
+      <DependentUpon>202112100903132_loadandweatherinsametable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112100908074_loadinweather.cs" />
+    <Compile Include="Migrations\202112100908074_loadinweather.designer.cs">
+      <DependentUpon>202112100908074_loadinweather.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112100909260_loadinweather1.cs" />
+    <Compile Include="Migrations\202112100909260_loadinweather1.designer.cs">
+      <DependentUpon>202112100909260_loadinweather1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DataBaseContext.cs" />
     <Compile Include="Model\Load.cs" />
@@ -167,6 +179,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112071045206_doublecloud.resx">
       <DependentUpon>202112071045206_doublecloud.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112100903132_loadandweatherinsametable.resx">
+      <DependentUpon>202112100903132_loadandweatherinsametable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112100908074_loadinweather.resx">
+      <DependentUpon>202112100908074_loadinweather.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112100909260_loadinweather1.resx">
+      <DependentUpon>202112100909260_loadinweather1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
