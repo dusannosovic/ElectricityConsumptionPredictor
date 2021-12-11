@@ -46,5 +46,21 @@ namespace DataBase.Controller
                 return db.LoadTable.ToList();
             }
         }
+        public static void AddPowerPlant(PowerPlant plant)
+        {
+            using(var db = new DataBaseContext())
+            {
+                db.PowerPlantsTable.Add(plant);
+                db.SaveChanges();
+            }
+        }
+        public static List<PowerPlant> GetPowerPlants()
+        {
+            using (var db = new DataBaseContext())
+            {
+
+                return db.PowerPlantsTable.ToList();
+            }
+        }
     }
 }

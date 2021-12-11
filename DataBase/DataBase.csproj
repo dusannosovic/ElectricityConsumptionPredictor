@@ -134,9 +134,14 @@
     <Compile Include="Migrations\202112100909260_loadinweather1.designer.cs">
       <DependentUpon>202112100909260_loadinweather1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112111832103_powerplant.cs" />
+    <Compile Include="Migrations\202112111832103_powerplant.designer.cs">
+      <DependentUpon>202112111832103_powerplant.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DataBaseContext.cs" />
     <Compile Include="Model\Load.cs" />
+    <Compile Include="Model\PowerPlant.cs" />
     <Compile Include="Model\SunriseSunset.cs" />
     <Compile Include="Model\TableEntity.cs" />
     <Compile Include="Model\Weather.cs" />
@@ -188,6 +193,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112100909260_loadinweather1.resx">
       <DependentUpon>202112100909260_loadinweather1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112111832103_powerplant.resx">
+      <DependentUpon>202112111832103_powerplant.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

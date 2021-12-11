@@ -30,3 +30,4 @@ C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Deb
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.Migrations.loadandweatherinsametable.resources
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.Migrations.loadinweather.resources
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.Migrations.loadinweather1.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.Migrations.powerplant.resources

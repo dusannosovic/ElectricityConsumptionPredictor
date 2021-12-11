@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -23,7 +24,7 @@ namespace ProjekatInteligentniInfSis.Controllers
         }
         [Route("api/Home/PostFile")]
         [HttpPost]
-        public string PostFile()
+        public HttpResponseMessage PostFile()
         {
             {
                     #region Variable Declaration  
@@ -69,10 +70,16 @@ namespace ProjekatInteligentniInfSis.Controllers
                     }
 
 
-                    return "Uspesno";
+                return new HttpResponseMessage(HttpStatusCode.OK);
 
             }
 
+        }
+        [Route("api/Home/GetNumberOfRow")]
+        [HttpGet]
+        public int NumberOfRow()
+        {
+            return CrudOperations.GetAllWeather().Count;
         }
         public List<Load> ParseLoad(DataTable dt)
         {
