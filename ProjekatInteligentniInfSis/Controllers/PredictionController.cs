@@ -1,17 +1,28 @@
-﻿using System;
+﻿using DataBase.Controller;
+using DataBase.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
 
 namespace ProjekatInteligentniInfSis.Controllers
 {
-    public class PredictionController : Controller
+    public class PredictionController : ApiController
     {
         // GET: Prediction
-        public ActionResult Index()
+        [Route("api/Prediction/Predict")]
+        [HttpGet]
+        public string Predict(DateTime year ,long numberofdays)
         {
-            return View("Prediction");
+            List<Weather> weathers = new List<Weather>();
+            for(int i = 0; i < numberofdays; i++)
+            {
+                year.AddDays(i);
+                weathers.AddRange(CrudOperations.GetAllWeather().Where(s => s.LocalTime.Date == year.Date));
+            }
+
+            return "Uspesno";
         }
     }
 }

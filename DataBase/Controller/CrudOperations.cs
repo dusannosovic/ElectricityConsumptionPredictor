@@ -62,5 +62,13 @@ namespace DataBase.Controller
                 return db.PowerPlantsTable.ToList();
             }
         }
+        public static void DeleteWeather()
+        {
+            using(var db = new DataBaseContext())
+            {
+                db.Database.ExecuteSqlCommand("TRUNCATE TABLE [WeatherTable]");
+                db.SaveChanges();
+            }
+        }
     }
 }

@@ -25,6 +25,13 @@ namespace ProjekatInteligentniInfSis.Controllers
         {
             return CrudOperations.GetPowerPlants();
         }
+        [Route("api/Optimization/SetOptimizationParameters")]
+        [HttpPost]
+        public string SetOptimizationParameters(Tuple<List<PowerPlant>,string> optimization)
+        {
+
+            return "";
+        }
 
     }
 }

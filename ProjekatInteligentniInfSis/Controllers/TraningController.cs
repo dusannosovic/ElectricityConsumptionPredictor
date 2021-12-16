@@ -16,14 +16,23 @@ namespace ProjekatInteligentniInfSis.Controllers
 {
     public class TraningController : ApiController
     {
+        Traning tr = new Traning();
         // GET: Traning
         [Route("api/Traning/GetTable")]
         [HttpGet]
         public string GetTable()
         {
-            Traning tr = new Traning();
+            //Traning tr = new Traning();
             tr.TrainModel();
-            return "uspesno";
+            //tr.Predict();
+            return "Uspesno Treniran model";
+        }
+        [Route("api/Traning/Predict")]
+        [HttpGet]
+        public string Predict()
+        {
+            tr.Predict();
+            return tr.Predict();
         }
     }
 }

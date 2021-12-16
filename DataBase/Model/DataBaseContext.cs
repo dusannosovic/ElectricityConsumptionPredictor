@@ -20,6 +20,7 @@ namespace DataBase.Model
             modelBuilder.Entity<SunriseSunset>().ToTable("SunriseSunsetTable");
             modelBuilder.Entity<Weather>().ToTable("WeatherTable");
             modelBuilder.Entity<PowerPlant>().ToTable("PowerPlantsTable");
+            modelBuilder.Entity<Prediction>().ToTable("PredictionsTable");
             modelBuilder.Properties<DateTime>().Configure(c => c.HasColumnType("datetime2"));
         }
 
@@ -27,6 +28,8 @@ namespace DataBase.Model
         public DbSet<Load> LoadTable { get; set; }
         public DbSet<SunriseSunset> SunriseSunsetTable { get; set; }
         public DbSet<PowerPlant> PowerPlantsTable { get; set; }
+
+        public DbSet<Prediction> PredictionsTable { get; set; }
 
 
     }

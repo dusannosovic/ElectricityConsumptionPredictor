@@ -18,7 +18,7 @@ namespace ProjekatInteligentniInfSis.Controllers
     {
         [Route("api/Home/GetTicket")]
         [HttpGet]
-        public string GetTicket()
+        public string GetTicket(int year,int month,int day, int numberofdays)
         {
             return "dusan";
         }
@@ -84,7 +84,7 @@ namespace ProjekatInteligentniInfSis.Controllers
         public List<Load> ParseLoad(DataTable dt)
         {
             List<Load> loads = new List<Load>();
-            for (int i = 1; i < 150; i++)
+            for (int i = 1; i < dt.Rows.Count; i++)
             {
                 Load load = new Load();
                 load.Id = i;
@@ -112,7 +112,7 @@ namespace ProjekatInteligentniInfSis.Controllers
             Dictionary<DateTime, Int32> Loads = new Dictionary<DateTime, Int32>();
             DateTime time;
             Int32 load;
-            for (int i = 1; i < 150; i++)
+            for (int i = 1; i < dt.Rows.Count; i++)
             {
                 if (!string.IsNullOrEmpty(Convert.ToString(dt.Rows[i][0])))
                 {
@@ -138,7 +138,7 @@ namespace ProjekatInteligentniInfSis.Controllers
         public List<Weather> ParseWeather(DataTable dtWeather, Dictionary<DateTime,Int32> loads)
         {
             List<Weather> weathers = new List<Weather>();
-            for (int i = 1; i < 150; i++)
+            for (int i = 1; i < dtWeather.Rows.Count; i++)
             {
                 if (!string.IsNullOrEmpty(Convert.ToString(dtWeather.Rows[i][0])))
                 {
@@ -161,21 +161,41 @@ namespace ProjekatInteligentniInfSis.Controllers
                     {
                         weather.Temperature = Convert.ToDouble(dtWeather.Rows[i][1]);
                     }
+                    else
+                    {
+                        weather.Temperature = FindNumber(dtWeather, i, 1);
+                    }
                     if (!string.IsNullOrEmpty(dtWeather.Rows[i][2].ToString()))
                     {
                         weather.APressure = Convert.ToDouble(dtWeather.Rows[i][2]);
+                    }
+                    else
+                    {
+                        weather.APressure = FindNumber(dtWeather, i, 2);
                     }
                     if (!string.IsNullOrEmpty(dtWeather.Rows[i][3].ToString()))
                     {
                         weather.Pressure = Convert.ToDouble(dtWeather.Rows[i][3]);
                     }
+                    else
+                    {
+                        weather.Pressure = FindNumber(dtWeather, i, 3);
+                    }
                     if (!string.IsNullOrEmpty(dtWeather.Rows[i][4].ToString()))
                     {
                         weather.PTencdency = Convert.ToDouble(dtWeather.Rows[i][4]);
                     }
+                    else
+                    {
+                        weather.PTencdency = FindNumber(dtWeather, i, 4);
+                    }
                     if (!string.IsNullOrEmpty(dtWeather.Rows[i][5].ToString()))
                     {
                         weather.Humidity = Convert.ToInt32(dtWeather.Rows[i][5]);
+                    }
+                    else
+                    {
+                        weather.Humidity = Convert.ToInt32(FindNumber(dtWeather, i, 5));
                     }
                     if (dtWeather.Rows[i][6] != null)
                     {
@@ -187,7 +207,7 @@ namespace ProjekatInteligentniInfSis.Controllers
                     }
                     else
                     {
-                        continue;
+                        weather.WindSpeed = Convert.ToInt32(FindNumber(dtWeather,i,7));
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dtWeather.Rows[i][10])))
                     {
@@ -228,7 +248,7 @@ namespace ProjekatInteligentniInfSis.Controllers
                         {
                             j--;
                         }
-                        while (string.IsNullOrEmpty(Convert.ToString(dtWeather.Rows[k][10])) && k <= dtWeather.Rows.Count)
+                        while (string.IsNullOrEmpty(Convert.ToString(dtWeather.Rows[k][10])) && k < dtWeather.Rows.Count-1)
                         {
                             k++;
                         }
@@ -263,7 +283,7 @@ namespace ProjekatInteligentniInfSis.Controllers
                                 weather.Clouds = 1;
                             }
                         }
-                        else if (k == dtWeather.Rows.Count)
+                        else if (k == dtWeather.Rows.Count-1)
                         {
                             if (Convert.ToString(dtWeather.Rows[j][10]).Contains('%') && Convert.ToString(dtWeather.Rows[j][10]).Length < 6)
                             {
@@ -366,40 +386,15 @@ namespace ProjekatInteligentniInfSis.Controllers
                     }
                     else
                     {
-                        int j = i;
-                        int k = i;
-                        while (string.IsNullOrEmpty(Convert.ToString(dtWeather.Rows[j][21])) && j >= 0)
-                        {
-                            j--;
-                        }
-                        while (string.IsNullOrEmpty(Convert.ToString(dtWeather.Rows[k][21])) && k <= dtWeather.Rows.Count)
-                        {
-                            k++;
-                        }
-                        if (j == 0)
-                        {
-                            double b;
-                            double.TryParse(dtWeather.Rows[k][21].ToString(), out b);
-                            weather.HVisibility = b;
-                        }
-                        else if (k == dtWeather.Rows.Count)
-                        {
-                            double b;
-                            double.TryParse(dtWeather.Rows[j][21].ToString(), out b);
-                            weather.HVisibility = b;
-                        }
-                        else
-                        {
-                            double b;
-                            double c;
-                            double.TryParse(dtWeather.Rows[j][21].ToString(), out b);
-                            double.TryParse(dtWeather.Rows[k][21].ToString(), out c);
-                            weather.HVisibility = (b + c) / 2;
-                        }
+                        weather.HVisibility = FindNumber(dtWeather, i, 21);
                     }
                     if (!string.IsNullOrEmpty(dtWeather.Rows[i][22].ToString()))
                     {
                         weather.DTemperature = Convert.ToDouble(dtWeather.Rows[i][22]);
+                    }
+                    else
+                    {
+                        weather.DTemperature = FindNumber(dtWeather, i, 22);
                     }
                     if (loads.ContainsKey(weather.LocalTime))
                     {
@@ -414,6 +409,39 @@ namespace ProjekatInteligentniInfSis.Controllers
             }
             return weathers;
             }
+        public double FindNumber(DataTable dtWeather, int i, int x)
+        {
+            int j = i;
+            int k = i;
+            while (string.IsNullOrEmpty(Convert.ToString(dtWeather.Rows[j][x])) && j >= 0)
+            {
+                j--;
+            }
+            while (string.IsNullOrEmpty(Convert.ToString(dtWeather.Rows[k][x])) && k < dtWeather.Rows.Count-1)
+            {
+                k++;
+            }
+            if (j == 0)
+            {
+                double b;
+                double.TryParse(dtWeather.Rows[k][x].ToString(), out b);
+                return b;
+            }
+            else if (k == dtWeather.Rows.Count-1)
+            {
+                double b;
+                double.TryParse(dtWeather.Rows[j][x].ToString(), out b);
+                return b;
+            }
+            else
+            {
+                double b;
+                double c;
+                double.TryParse(dtWeather.Rows[j][x].ToString(), out b);
+                double.TryParse(dtWeather.Rows[k][x].ToString(), out c);
+                return (b + c) / 2;
+            }
+        }
 
     }
 }

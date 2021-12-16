@@ -31,3 +31,6 @@ C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Deb
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.Migrations.loadinweather.resources
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.Migrations.loadinweather1.resources
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.Migrations.powerplant.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.Migrations.prediction.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.Migrations.predictionoptinal.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\x64\Debug\DataBase.Migrations.predictionoptinal1.resources

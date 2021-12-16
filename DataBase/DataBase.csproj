@@ -138,10 +138,23 @@
     <Compile Include="Migrations\202112111832103_powerplant.designer.cs">
       <DependentUpon>202112111832103_powerplant.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112160920258_prediction.cs" />
+    <Compile Include="Migrations\202112160920258_prediction.designer.cs">
+      <DependentUpon>202112160920258_prediction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112161113504_predictionoptinal.cs" />
+    <Compile Include="Migrations\202112161113504_predictionoptinal.designer.cs">
+      <DependentUpon>202112161113504_predictionoptinal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112161116072_predictionoptinal1.cs" />
+    <Compile Include="Migrations\202112161116072_predictionoptinal1.designer.cs">
+      <DependentUpon>202112161116072_predictionoptinal1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DataBaseContext.cs" />
     <Compile Include="Model\Load.cs" />
     <Compile Include="Model\PowerPlant.cs" />
+    <Compile Include="Model\Prediction.cs" />
     <Compile Include="Model\SunriseSunset.cs" />
     <Compile Include="Model\TableEntity.cs" />
     <Compile Include="Model\Weather.cs" />
@@ -196,6 +209,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112111832103_powerplant.resx">
       <DependentUpon>202112111832103_powerplant.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112160920258_prediction.resx">
+      <DependentUpon>202112160920258_prediction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112161113504_predictionoptinal.resx">
+      <DependentUpon>202112161113504_predictionoptinal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112161116072_predictionoptinal1.resx">
+      <DependentUpon>202112161116072_predictionoptinal1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
