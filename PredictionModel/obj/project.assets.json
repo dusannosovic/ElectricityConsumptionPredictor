@@ -117,7 +117,7 @@
           "lib/net461/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
         }
       },
-      "Numpy.Bare/3.7.1.26": {
+      "Numpy.Bare/3.7.1.27": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.5.0",
@@ -154,16 +154,7 @@
           "lib/netstandard2.0/Protobuf.Text.dll": {}
         }
       },
-      "pythonnet_netstandard_py37_win/2.5.1": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Python.Runtime.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Python.Runtime.dll": {}
-        }
-      },
-      "pythonnet_netstandard_py38_win/2.5.1": {
+      "pythonnet_netstandard_py37_win/2.5.2": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Python.Runtime.dll": {}
@@ -430,7 +421,7 @@
           "lib/net461/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
         }
       },
-      "Numpy.Bare/3.7.1.26": {
+      "Numpy.Bare/3.7.1.27": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.5.0",
@@ -467,16 +458,7 @@
           "lib/netstandard2.0/Protobuf.Text.dll": {}
         }
       },
-      "pythonnet_netstandard_py37_win/2.5.1": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Python.Runtime.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Python.Runtime.dll": {}
-        }
-      },
-      "pythonnet_netstandard_py38_win/2.5.1": {
+      "pythonnet_netstandard_py37_win/2.5.2": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Python.Runtime.dll": {}
@@ -721,7 +703,7 @@
           "lib/net461/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
         }
       },
-      "Numpy.Bare/3.7.1.26": {
+      "Numpy.Bare/3.7.1.27": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.5.0",
@@ -758,16 +740,7 @@
           "lib/netstandard2.0/Protobuf.Text.dll": {}
         }
       },
-      "pythonnet_netstandard_py37_win/2.5.1": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Python.Runtime.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Python.Runtime.dll": {}
-        }
-      },
-      "pythonnet_netstandard_py38_win/2.5.1": {
+      "pythonnet_netstandard_py37_win/2.5.2": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Python.Runtime.dll": {}
@@ -1015,7 +988,7 @@
           "lib/net461/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
         }
       },
-      "Numpy.Bare/3.7.1.26": {
+      "Numpy.Bare/3.7.1.27": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.5.0",
@@ -1052,16 +1025,7 @@
           "lib/netstandard2.0/Protobuf.Text.dll": {}
         }
       },
-      "pythonnet_netstandard_py37_win/2.5.1": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Python.Runtime.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Python.Runtime.dll": {}
-        }
-      },
-      "pythonnet_netstandard_py38_win/2.5.1": {
+      "pythonnet_netstandard_py37_win/2.5.2": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Python.Runtime.dll": {}
@@ -1469,15 +1433,15 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Numpy.Bare/3.7.1.26": {
-      "sha512": "Cg8vR+MnN1hkXSibUtm+l24CTsflv5Kc30LM4PT3LrkUOxIN9xXP78cQoOo8i3poMND7BfBryGL5wT0lbRHkHw==",
+    "Numpy.Bare/3.7.1.27": {
+      "sha512": "CUOYNcQVZ2aWFdF+TJtvFOqZ3cKK9TRJN5HHn2Qqtu8BEFwJaAfGQ62uhqsi1E2OeT/muybcPOvhjspwUR7l6Q==",
       "type": "package",
-      "path": "numpy.bare/3.7.1.26",
+      "path": "numpy.bare/3.7.1.27",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Numpy.Bare.dll",
-        "numpy.bare.3.7.1.26.nupkg.sha512",
+        "numpy.bare.3.7.1.27.nupkg.sha512",
         "numpy.bare.nuspec"
       ]
     },
@@ -1505,30 +1469,17 @@
         "protobuf.text.nuspec"
       ]
     },
-    "pythonnet_netstandard_py37_win/2.5.1": {
-      "sha512": "RMsXNGdWfq8eCSmrA/lWXXiB2j8fT/IkXANTtAh7z0jN9ydN5JJQ+EGdAw8g+GvG4WBxEjyv4TUqDERuMN826Q==",
+    "pythonnet_netstandard_py37_win/2.5.2": {
+      "sha512": "VYASBYihOKITSqDLiyHlPBe0zRQpcezrWtP89h86jIbCVtPz8bwy2J/erWKWBV/VBWDZWautm0VoEmEmaYIOTw==",
       "type": "package",
-      "path": "pythonnet_netstandard_py37_win/2.5.1",
+      "path": "pythonnet_netstandard_py37_win/2.5.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Python.Runtime.dll",
         "lib/netstandard2.0/Python.Runtime.xml",
-        "pythonnet_netstandard_py37_win.2.5.1.nupkg.sha512",
+        "pythonnet_netstandard_py37_win.2.5.2.nupkg.sha512",
         "pythonnet_netstandard_py37_win.nuspec"
-      ]
-    },
-    "pythonnet_netstandard_py38_win/2.5.1": {
-      "sha512": "y8D5KG5Z5pFUzxBINwaN6LuM50LpkRV3TD8Lrn9jz1spbT1mBSCeYAzyA8MSo9+Jb3R/evXq0m3+d1KiDGGYUg==",
-      "type": "package",
-      "path": "pythonnet_netstandard_py38_win/2.5.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.0/Python.Runtime.dll",
-        "lib/netstandard2.0/Python.Runtime.xml",
-        "pythonnet_netstandard_py38_win.2.5.1.nupkg.sha512",
-        "pythonnet_netstandard_py38_win.nuspec"
       ]
     },
     "SciSharp.TensorFlow.Redist/2.6.0": {
@@ -1773,14 +1724,13 @@
       "Keras.NET >= 3.7.5",
       "MethodBoundaryAspect.Fody >= 2.0.144",
       "Microsoft.Extensions.DependencyInjection >= 6.0.0",
-      "Numpy.Bare >= 3.7.1.26",
+      "Numpy.Bare >= 3.7.1.27",
       "Pandas.NET >= 0.2.0",
       "Protobuf.Text >= 0.5.0",
       "SciSharp.TensorFlow.Redist >= 2.6.0",
       "Serilog.Sinks.Console >= 4.0.1",
       "TensorFlow.NET >= 0.60.5",
-      "pythonnet_netstandard_py37_win >= 2.5.1",
-      "pythonnet_netstandard_py38_win >= 2.5.1"
+      "pythonnet_netstandard_py37_win >= 2.5.2"
     ]
   },
   "packageFolders": {
@@ -1846,7 +1796,7 @@
           },
           "Numpy.Bare": {
             "target": "Package",
-            "version": "[3.7.1.26, )"
+            "version": "[3.7.1.27, )"
           },
           "Pandas.NET": {
             "target": "Package",
@@ -1870,11 +1820,7 @@
           },
           "pythonnet_netstandard_py37_win": {
             "target": "Package",
-            "version": "[2.5.1, )"
-          },
-          "pythonnet_netstandard_py38_win": {
-            "target": "Package",
-            "version": "[2.5.1, )"
+            "version": "[2.5.2, )"
           }
         }
       }

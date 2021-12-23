@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 
@@ -24,7 +25,7 @@ namespace ProjekatInteligentniInfSis.Controllers
         }
         [Route("api/Home/PostFile")]
         [HttpPost]
-        public HttpResponseMessage PostFile()
+        public async Task<HttpResponseMessage> PostFile()
         {
             {
                     #region Variable Declaration  
@@ -60,7 +61,7 @@ namespace ProjekatInteligentniInfSis.Controllers
                                 DataTable dtLoad = dsexcelRecords.Tables["load"];
                                 Dictionary<DateTime, Int32> Loads = ParseLoadToDictionary(dtLoad);
                                 //int count = dtWeather.Rows.Count;
-                                CrudOperations.AddWeatherEntites(ParseWeather(dtWeather,Loads));
+                                await CrudOperations.AddWeatherEntites(ParseWeather(dtWeather,Loads));
 
                                 //CrudOperations.AddLoadEntites(ParseLoad(dtLoad));
                             }
@@ -126,7 +127,7 @@ namespace ProjekatInteligentniInfSis.Controllers
                     string[] Dshortsplited = DShort[0].Split('/');
                     //string[] TfSpliteed = TFSplit[1].Split(':');
                     string[] TTsplited = TTSplit[1].Split(':');
-                    time =  new DateTime(Int32.Parse(Dshortsplited[2]), Int32.Parse(Dshortsplited[0]), Int32.Parse(Dshortsplited[1]), Int32.Parse(TFSplit[0]), Int32.Parse(TFSplit[1]), 1);
+                    time =  new DateTime(Int32.Parse(Dshortsplited[2]), Int32.Parse(Dshortsplited[0]), Int32.Parse(Dshortsplited[1]), Int32.Parse(TFSplit[0]), Int32.Parse(TFSplit[1]), 0);
                     //load.TimeTo = new DateTime(Int32.Parse(Dshortsplited[2]), Int32.Parse(Dshortsplited[0]), Int32.Parse(Dshortsplited[1]), Int32.Parse(TTsplited[0]), Int32.Parse(TTsplited[1]), 0);
                     load = Convert.ToInt32(dt.Rows[i][3].ToString());
                     Loads.Add(time, load);
@@ -154,7 +155,7 @@ namespace ProjekatInteligentniInfSis.Controllers
                         string[] split = a.Split(' ');
                         string[] date = split[0].Split('.');
                         string[] hours = split[1].Split(':');
-                        weather.LocalTime = new DateTime(Int32.Parse(date[2]), Int32.Parse(date[1]), Int32.Parse(date[0]), Int32.Parse(hours[0]), Int32.Parse(hours[1]), 1);
+                        weather.LocalTime = new DateTime(Int32.Parse(date[2]), Int32.Parse(date[1]), Int32.Parse(date[0]), Int32.Parse(hours[0]), Int32.Parse(hours[1]), 0);
 
                     }
                     if (!string.IsNullOrEmpty(dtWeather.Rows[i][1].ToString()))

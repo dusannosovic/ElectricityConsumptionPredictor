@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "KaX/xAoOulgWqAs8XdFladiU3m7U4es2e0AyKMRmIAGZxsZhOpM0EXg4750tWT5EXJ6tFFpcKgoihlpSD4qFzA==",
+  "dgSpecHash": "anMVJisbK77vttuc/Y66+AzhT60k7oh/uZif4eP/2FTwLJGOCyJVdYc0m0HlKnHn4fiDEtr2OD4LKB/WskiaiQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Dusan\\source\\repos\\ElectricityConsumptionPredictor\\PredictionModel\\PredictionModel.csproj",
   "expectedPackageFiles": [
@@ -13,11 +13,10 @@
     "C:\\Users\\Dusan\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Dusan\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\6.0.0\\microsoft.extensions.dependencyinjection.6.0.0.nupkg.sha512",
     "C:\\Users\\Dusan\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
-    "C:\\Users\\Dusan\\.nuget\\packages\\numpy.bare\\3.7.1.26\\numpy.bare.3.7.1.26.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\numpy.bare\\3.7.1.27\\numpy.bare.3.7.1.27.nupkg.sha512",
     "C:\\Users\\Dusan\\.nuget\\packages\\pandas.net\\0.2.0\\pandas.net.0.2.0.nupkg.sha512",
     "C:\\Users\\Dusan\\.nuget\\packages\\protobuf.text\\0.5.0\\protobuf.text.0.5.0.nupkg.sha512",
-    "C:\\Users\\Dusan\\.nuget\\packages\\pythonnet_netstandard_py37_win\\2.5.1\\pythonnet_netstandard_py37_win.2.5.1.nupkg.sha512",
-    "C:\\Users\\Dusan\\.nuget\\packages\\pythonnet_netstandard_py38_win\\2.5.1\\pythonnet_netstandard_py38_win.2.5.1.nupkg.sha512",
+    "C:\\Users\\Dusan\\.nuget\\packages\\pythonnet_netstandard_py37_win\\2.5.2\\pythonnet_netstandard_py37_win.2.5.2.nupkg.sha512",
     "C:\\Users\\Dusan\\.nuget\\packages\\scisharp.tensorflow.redist\\2.6.0\\scisharp.tensorflow.redist.2.6.0.nupkg.sha512",
     "C:\\Users\\Dusan\\.nuget\\packages\\serilog\\2.10.0\\serilog.2.10.0.nupkg.sha512",
     "C:\\Users\\Dusan\\.nuget\\packages\\serilog.sinks.console\\4.0.1\\serilog.sinks.console.4.0.1.nupkg.sha512",

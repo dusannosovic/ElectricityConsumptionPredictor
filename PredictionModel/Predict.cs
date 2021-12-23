@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PredictionModel
 {
-    class Predict
+    public class Predict
     {
         List<Weather> listOfWeathersToPredict;
         public float[,] RowDataX(List<Weather> weatherList)
@@ -43,7 +43,7 @@ namespace PredictionModel
             float maxHvisibility = (float)Convert.ToDouble(weathers.Select(s => s.HVisibility).Max());
             float minHvisibility = (float)Convert.ToDouble(weathers.Select(s => s.HVisibility).Min());
             float maxDTemperature = (float)Convert.ToDouble(weathers.Select(s => s.DTemperature).Max());
-            float minDTemperature = (float)Convert.ToDouble(weathers.Select(s => s.Temperature).Min());
+            float minDTemperature = (float)Convert.ToDouble(weathers.Select(s => s.DTemperature).Min());
             for (int i = 0; i < weatherList.Count; i++)
             {
 
@@ -69,12 +69,29 @@ namespace PredictionModel
             var ar = Numpy.np.array(TestX);
             var testx = Numpy.np.reshape(ar, (ar.shape[0], 1, ar.shape[1]));
             var model = Keras.Models.Model.LoadModel("C:/Users/Dusan/Desktop/Modeli");
-            var predict1 = model.Predict(testx);
+            if (model != null)
+            {
+                var predict1 = model.Predict(testx);
+                List<Prediction> predictions = LoadInverse(predict1, weathers);
+                CrudOperations.AddPrediction(predictions);
+            }
 
         }
-        public List<Prediction> LoadInverse()
+        public List<Prediction> LoadInverse(Numpy.NDarray array, List<Weather> weathers)
         {
-
+            var testPredict = Numpy.np.reshape(array, (array.shape[0]));
+            float maxLoad = (float)Convert.ToDouble(CrudOperations.GetAllWeather().Select(s => s.Load).Max());
+            float minLoad = (float)Convert.ToDouble(CrudOperations.GetAllWeather().Select(s => s.Load).Min());
+            float test;
+            Prediction temp;
+            List<Prediction> predictions = new List<Prediction>();
+            for(int i = 0;i<testPredict.size; i++)
+            {
+                test = (float)testPredict[i] * (maxLoad - minLoad) + minLoad;
+                temp = new Prediction() { Date = weathers[i].LocalTime, Predicted = (int)test };
+                predictions.Add(temp);
+            }
+            return predictions;
         }
 
         private float Scale(float value, float min, float max, float minScale, float maxScale)

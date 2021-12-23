@@ -10,7 +10,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
-using PredictionModel;
 
 namespace ProjekatInteligentniInfSis.Controllers
 {
@@ -31,8 +30,8 @@ namespace ProjekatInteligentniInfSis.Controllers
         [HttpGet]
         public string Predict()
         {
-            tr.Predict();
-            return tr.Predict();
+            string a = tr.Predict();
+            return a;
         }
     }
 }

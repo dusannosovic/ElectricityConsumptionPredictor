@@ -79,7 +79,7 @@
             },
             "Numpy.Bare": {
               "target": "Package",
-              "version": "[3.7.1.26, )"
+              "version": "[3.7.1.27, )"
             },
             "Pandas.NET": {
               "target": "Package",
@@ -103,11 +103,7 @@
             },
             "pythonnet_netstandard_py37_win": {
               "target": "Package",
-              "version": "[2.5.1, )"
-            },
-            "pythonnet_netstandard_py38_win": {
-              "target": "Package",
-              "version": "[2.5.1, )"
+              "version": "[2.5.2, )"
             }
           }
         }
