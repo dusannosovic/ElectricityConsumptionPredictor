@@ -25,9 +25,13 @@ namespace ProjekatInteligentniInfSis.Controllers
                 day = year.AddDays(i);
                 weathers.AddRange(CrudOperations.GetAllWeather().Where(s => s.LocalTime.Date == day.Date));
             }
-            predictValues.Prediction(weathers);
-
-            return "Uspesno";
+            if (weathers.Count > 0)
+            {
+                predictValues.Prediction(weathers);
+                return "Uspesno previdjanje";
+            }
+            return "Neuspesno predvidjanje";
+            
         }
         [Route("api/Prediction/GetPredictedValues")]
         [HttpGet]
@@ -37,9 +41,9 @@ namespace ProjekatInteligentniInfSis.Controllers
         }
         [Route("api/Prediction/WriteToCsv")]
         [HttpGet]
-        public string WriteToCsv()
+        public string WriteToCsv(List<Prediction> predictions)
         {
-            if (CrudOperations.GetPredictions().Count > 0)
+            if (predictions.Count > 0)
             {
                 StreamWriter sw = new StreamWriter("C:/Users/Dusan/source/repos/ElectricityConsumptionPredictor/predictions.csv", false);
                 sw.Write("Time");

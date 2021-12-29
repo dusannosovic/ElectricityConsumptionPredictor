@@ -13,11 +13,20 @@ namespace DataBase.Controller
         {
             using (var db = new DataBaseContext())
             {
+                //db.Database.ExecuteSqlCommand("TRUNCATE TABLE [WeatherTable]");
+
+                //db.SaveChanges();
+                db.WeatherTable.AddRange(weathers);
+                await db.SaveChangesAsync();
+            }
+        }
+        public static void DeleteWeatherTable()
+        {
+            using (var db = new DataBaseContext())
+            {
                 db.Database.ExecuteSqlCommand("TRUNCATE TABLE [WeatherTable]");
 
                 db.SaveChanges();
-                db.WeatherTable.AddRange(weathers);
-                await db.SaveChangesAsync();
             }
         }
         public static void AddLoadEntites(List<Load> loads)
@@ -77,6 +86,21 @@ namespace DataBase.Controller
                 db.Database.ExecuteSqlCommand("TRUNCATE TABLE [PredictionsTable]");
                 db.SaveChanges();
                 db.PredictionsTable.AddRange(predictions);
+                db.SaveChanges();
+            }
+        }
+        public static void  UpdatePrediction(List<Prediction> predictions)
+        {
+            using(var db = new DataBaseContext())
+            {
+                foreach (Prediction pred in predictions)
+                {
+                    if (db.PredictionsTable.Select(s=>s.Date).Contains(pred.Date))
+                    {
+                        db.PredictionsTable.Remove(pred);
+                    }
+                    db.PredictionsTable.Add(pred);
+                }
                 db.SaveChanges();
             }
         }

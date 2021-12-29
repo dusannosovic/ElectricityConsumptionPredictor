@@ -6,16 +6,27 @@ using System.Web;
 using System.Web.Http;
 using DataBase.Controller;
 using DataBase.Model;
+using OptimisationModel;
 
 namespace ProjekatInteligentniInfSis.Controllers
 {
     public class OptimizationController : ApiController
     {
+        const float maxSunInsolation = (float)0.001;
+        const float windTurbinePowerPerSquareMeter = (float)0.00034;
         [Route("api/Optimization/AddPowerPlant")]
         [HttpPost]
         public string AddPowerPlant(PowerPlant powerPlant)
         {
-           var request = HttpContext.Current.Request;
+            var request = HttpContext.Current.Request;
+            if (powerPlant.Type=="Solar") {
+                powerPlant.MaxLoad = (int)(powerPlant.Area * maxSunInsolation);
+                powerPlant.Eff = powerPlant.Eff / 100;
+            }
+            if (powerPlant.Type == "wind")
+            {
+                powerPlant.MaxLoad = (int)(powerPlant.Area * windTurbinePowerPerSquareMeter);
+            }
             CrudOperations.AddPowerPlant(powerPlant);
             return "ok";
         }
@@ -27,8 +38,12 @@ namespace ProjekatInteligentniInfSis.Controllers
         }
         [Route("api/Optimization/SetOptimizationParameters")]
         [HttpPost]
-        public string SetOptimizationParameters(Tuple<List<PowerPlant>,string> optimization)
+        public string SetOptimizationParameters(OptimizationData pwrPlants) 
         {
+
+            Optimisation opt = new Optimisation();
+            //List<Tuple<int, PowerPlant>> powrPlant = new List<Tuple<int, PowerPlant>>();
+            opt.MakeOptimization(pwrPlants);
 
             return "";
         }

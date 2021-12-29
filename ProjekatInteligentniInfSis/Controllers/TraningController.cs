@@ -19,12 +19,21 @@ namespace ProjekatInteligentniInfSis.Controllers
         // GET: Traning
         [Route("api/Traning/GetTable")]
         [HttpGet]
-        public string GetTable()
+        public string GetTable(string dateTimeStart,string dateTimeEnd)
         {
             //Traning tr = new Traning();
-            tr.TrainModel();
+            if(dateTimeStart!= null && dateTimeEnd != null)
+            {
+                
+                return tr.TrainModel(dateTimeStart,dateTimeEnd);
+            }
+            else
+            {
+                return tr.TrainModel(null, null);
+            }
+
             //tr.Predict();
-            return "Uspesno Treniran model";
+            //return "Uspesno Treniran model";
         }
         [Route("api/Traning/Predict")]
         [HttpGet]

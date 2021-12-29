@@ -15,6 +15,7 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,6 +52,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
@@ -76,7 +80,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Controller\CrudOperations.cs" />
     <Compile Include="Migrations\202111240905397_InitialCreate.cs" />
     <Compile Include="Migrations\202111240905397_InitialCreate.designer.cs">
@@ -150,9 +153,14 @@
     <Compile Include="Migrations\202112161116072_predictionoptinal1.designer.cs">
       <DependentUpon>202112161116072_predictionoptinal1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112242344590_powrplnt.cs" />
+    <Compile Include="Migrations\202112242344590_powrplnt.designer.cs">
+      <DependentUpon>202112242344590_powrplnt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DataBaseContext.cs" />
     <Compile Include="Model\Load.cs" />
+    <Compile Include="Model\OptimizationData.cs" />
     <Compile Include="Model\PowerPlant.cs" />
     <Compile Include="Model\Prediction.cs" />
     <Compile Include="Model\SunriseSunset.cs" />
@@ -218,6 +226,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112161116072_predictionoptinal1.resx">
       <DependentUpon>202112161116072_predictionoptinal1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112242344590_powrplnt.resx">
+      <DependentUpon>202112242344590_powrplnt.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

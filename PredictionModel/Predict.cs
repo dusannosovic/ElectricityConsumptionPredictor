@@ -2,6 +2,7 @@
 using DataBase.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,7 +74,8 @@ namespace PredictionModel
             {
                 var predict1 = model.Predict(testx);
                 List<Prediction> predictions = LoadInverse(predict1, weathers);
-                CrudOperations.AddPrediction(predictions);
+                CrudOperations.UpdatePrediction(predictions);
+                WriteToCsv(predictions);
             }
 
         }
@@ -98,6 +100,32 @@ namespace PredictionModel
         {
             float scaled = minScale + (value - min) / (max - min) * (maxScale - minScale);
             return scaled;
+        }
+        public string WriteToCsv(List<Prediction> predictions)
+        {
+            if (predictions.Count > 0)
+            {
+                string url = string.Format("C:/Users/Dusan/source/repos/ElectricityConsumptionPredictor/{0}-{1}.csv", predictions.First().Date.ToString(), predictions.First().Date.ToString());
+                StreamWriter sw = new StreamWriter("C:/Users/Dusan/source/repos/ElectricityConsumptionPredictor/predictionCsv/predictions.csv", false);
+                sw.Write("Time");
+                sw.Write(",");
+                sw.Write("Load");
+                sw.Write(sw.NewLine);
+                foreach (Prediction prediction in CrudOperations.GetPredictions())
+                {
+                    sw.Write(prediction.Date.ToString());
+                    sw.Write(",");
+                    sw.Write(prediction.Predicted.ToString());
+                    sw.Write(sw.NewLine);
+                }
+                sw.Close();
+                return "Uspesno upisano u csv";
+            }
+            else
+            {
+                return "Ne mozete upisati u Csv dokument";
+            }
+
         }
 
     }

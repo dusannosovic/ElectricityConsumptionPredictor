@@ -11,11 +11,12 @@ namespace DataBase.Model
     {
         [Key]
         public string Name { get; set; }
+        public string Type { get; set; }
         public int MaxLoad { get; set; }
         public int MinLoad { get; set; }
-        public int FuelConsumption { get; set; }
-        public int Co2Emmision { get; set; }
-        public string Type { get; set; }
+        public int Area { get; set; }
+        public float Eff { get; set; }
+
 
     }
 }

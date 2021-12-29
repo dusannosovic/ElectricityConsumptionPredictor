@@ -1,0 +1,16 @@
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\bin\Debug\netstandard2.0\OptimizationModel.deps.json
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\bin\Debug\netstandard2.0\OptimizationModel.dll
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\bin\Debug\netstandard2.0\OptimizationModel.pdb
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\bin\Debug\netstandard2.0\DataBase.dll
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\bin\Debug\netstandard2.0\EntityFramework.dll
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\bin\Debug\netstandard2.0\DataBase.pdb
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\bin\Debug\netstandard2.0\DataBase.dll.config
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\bin\Debug\netstandard2.0\EntityFramework.xml
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\obj\Debug\netstandard2.0\OptimizationModel.csproj.AssemblyReference.cache
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\obj\Debug\netstandard2.0\OptimizationModel.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\obj\Debug\netstandard2.0\OptimizationModel.AssemblyInfoInputs.cache
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\obj\Debug\netstandard2.0\OptimizationModel.AssemblyInfo.cs
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\obj\Debug\netstandard2.0\OptimizationModel.csproj.CoreCompileInputs.cache
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\obj\Debug\netstandard2.0\OptimizationModel.csproj.CopyComplete
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\obj\Debug\netstandard2.0\OptimizationModel.dll
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\OptimizationModel\obj\Debug\netstandard2.0\OptimizationModel.pdb
