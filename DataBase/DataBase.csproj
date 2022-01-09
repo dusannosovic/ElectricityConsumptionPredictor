@@ -157,6 +157,14 @@
     <Compile Include="Migrations\202112242344590_powrplnt.designer.cs">
       <DependentUpon>202112242344590_powrplnt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202201081302247_sunriseSunset.cs" />
+    <Compile Include="Migrations\202201081302247_sunriseSunset.designer.cs">
+      <DependentUpon>202201081302247_sunriseSunset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202201081303131_sunriseSunset1.cs" />
+    <Compile Include="Migrations\202201081303131_sunriseSunset1.designer.cs">
+      <DependentUpon>202201081303131_sunriseSunset1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DataBaseContext.cs" />
     <Compile Include="Model\Load.cs" />
@@ -229,6 +237,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202112242344590_powrplnt.resx">
       <DependentUpon>202112242344590_powrplnt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201081302247_sunriseSunset.resx">
+      <DependentUpon>202201081302247_sunriseSunset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201081303131_sunriseSunset1.resx">
+      <DependentUpon>202201081303131_sunriseSunset1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

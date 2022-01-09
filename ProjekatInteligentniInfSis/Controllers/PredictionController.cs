@@ -35,36 +35,23 @@ namespace ProjekatInteligentniInfSis.Controllers
         }
         [Route("api/Prediction/GetPredictedValues")]
         [HttpGet]
-        public List<Prediction> GetPredictedValues()
+        public List<Prediction> GetPredictedValues(DateTime dateStart, DateTime dateEnd)
         {
-            return CrudOperations.GetPredictions();
+            return CrudOperations.GetPredictions().Where(s=>s.Date>=dateStart && s.Date<dateEnd.AddDays(1)).ToList();
         }
         [Route("api/Prediction/WriteToCsv")]
-        [HttpGet]
+        [HttpPost]
         public string WriteToCsv(List<Prediction> predictions)
         {
-            if (predictions.Count > 0)
-            {
-                StreamWriter sw = new StreamWriter("C:/Users/Dusan/source/repos/ElectricityConsumptionPredictor/predictions.csv", false);
-                sw.Write("Time");
-                sw.Write(",");
-                sw.Write("Load");
-                sw.Write(sw.NewLine);
-                foreach (Prediction prediction in CrudOperations.GetPredictions())
-                {
-                    sw.Write(prediction.Date.ToString());
-                    sw.Write(",");
-                    sw.Write(prediction.Predicted.ToString());
-                    sw.Write(sw.NewLine);
-                }
-                sw.Close();
-                return "Uspesno upisano u csv";
-            }
-            else
-            {
-                return "Ne mozete upisati u Csv dokument";
-            }
-
+            Predict predict = new Predict();
+            predict.WriteToCsv(predictions);
+            return "Uspesno upisano u csv Dokument";
+        }
+        [Route("api/Prediction/DeleteAllRecords")]
+        [HttpDelete]
+        public void DeleteAllRecords()
+        {
+            CrudOperations.DeletePredictionTable();
         }
     }
 }

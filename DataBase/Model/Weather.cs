@@ -26,6 +26,7 @@ namespace DataBase.Model
         public Double? Clouds { get; set; }
         public Double? HVisibility { get; set; }
         public Double? DTemperature { get; set; }
+        public Double? SunriseSunset { get; set; }
         public Int32 Load { get; set; }
     }
 }

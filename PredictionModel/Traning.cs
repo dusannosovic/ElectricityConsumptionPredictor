@@ -19,6 +19,18 @@ namespace PredictionModel
 {
     public class Traning
     {
+        public int BatchSize { get; set; } = 4;
+        public int EpochNumber { get; set; } = 350;
+        public string CostFunction { get; set; } = "mean_squared_error";
+        public string Optimizer { get; set; } = "adamax";
+        public string KernelInitializer { get; set; } = "random_normal";
+        public string ActivationFunction { get; set; } = "sigmoid";
+        public int NumberOfHiddenLayers { get; set; } = 4;
+        public int NumberOfNeuronsInFirstHiddenLayer { get; set; } = 10;
+        public int NumberOfNeuronsInOtherHiddenLayers { get; set; } = 12;
+        public int Verbose { get; set; } = 2;
+        public Keras.Shape inputShape { get; set; } = new Keras.Shape(1, 13);
+        public int InputDim { get; set; } = 13;
         public double trainPercentage = 0.95;
 
         public string TrainModel(string dateTimeStart, string dateTimeEnd)
@@ -56,25 +68,22 @@ namespace PredictionModel
             var ar = Numpy.np.array(TraningX);
             var trainy = Numpy.np.array(TraningY);
             var trainx = Numpy.np.reshape(ar, (ar.shape[0], 1, ar.shape[1]));
-            //var trainx = ar;
-            var model = new Sequential();
             var trainY = Numpy.np.reshape(trainy, (trainy.shape[0], 1, 1));
-            var shape = new Keras.Shape(1, 13);
-
-            model.Add(new Dense(8, activation: "sigmoid", kernel_initializer: "random_normal", input_shape: shape));
-            model.Add(new Dense(6, activation: "sigmoid", kernel_initializer: "random_normal"));
-            model.Add(new Dense(6, activation: "sigmoid", kernel_initializer: "random_normal"));
-            model.Add(new Dense(6, activation: "sigmoid", kernel_initializer: "random_normal"));
-            model.Add(new Dense(1, kernel_initializer: "random_normal"));
-            model.Compile(optimizer: "adam", loss: "mean_squared_error", metrics: new string[] { "mean_squared_error" });
+            InputDim = ar.shape[1];
+            inputShape = new Keras.Shape(1, ar.shape[1]);
+            //var trainx = ar;
+            var model = GetSequentialModel();
+            model.Compile(optimizer: Optimizer, loss: CostFunction, metrics: new string[] { "mean_squared_error" });
             System.Diagnostics.Debug.WriteLine("Trening start {0}", DateTime.Now);
             var csv_logger = new CSVLogger("C:/Users/Dusan/source/repos/ElectricityConsumptionPredictor/log.csv", ";", true);
             Callback[] callbacks = new Callback[] { csv_logger };
-            model.Fit(trainx, trainY, 4, 400, 2, callbacks);
+            model.Fit(x:trainx, y:trainY, batch_size: BatchSize, epochs: EpochNumber, verbose: Verbose, callbacks: callbacks);
+            //model.Fit(x: ar, y: trainy, batch_size: BatchSize, epochs: EpochNumber, verbose: Verbose, callbacks: callbacks);
             System.Diagnostics.Debug.WriteLine("Trening stop {0}", DateTime.Now);
             model.Save("C:/Users/Dusan/Desktop/Modeli");
             return "Uspesno treniran model";
         }
+
         public string Predict()
         {
             List<Weather> weathers = CrudOperations.GetAllWeather();
@@ -85,19 +94,19 @@ namespace PredictionModel
             var ar = Numpy.np.array(TestX);
             var ac = Numpy.np.array(TestY);
             var testx = Numpy.np.reshape(ar, (ar.shape[0],1, ar.shape[1]));
-            var testy = Numpy.np.reshape(ac, (ac.shape[0]));
+            //var testy = Numpy.np.reshape(ac, (ac.shape[0]));
 
             var model = Keras.Models.Model.LoadModel("C:/Users/Dusan/Desktop/Modeli");
             var predict1 = model.Predict(testx);
-            var predict = model.Evaluate(testx, testy);
-           //System.Diagnostics.Debug.WriteLine("accuracy {0}", predict.)
+            //var predict1 = model.Predict(ar);
+            //var predict = model.Evaluate(testx, testy);
+            //System.Diagnostics.Debug.WriteLine("accuracy {0}", predict.)
             return LoadInverse(predict1);
         }
 
-
         public float[,] RowDataX(int first, int last)
         {
-            float[,] a = new float[Math.Abs(last - first), 13];
+            float[,] a = new float[Math.Abs(last - first), 12];
             List<Weather> weathers = CrudOperations.GetAllWeather();
             float maxYear = (float)Convert.ToDouble(weathers.Select(s => s.LocalTime.Year).Max());
             float minYear = (float)Convert.ToDouble(weathers.Select(s => s.LocalTime.Year).Min());
@@ -141,8 +150,10 @@ namespace PredictionModel
                 a[i - first, 8] = Scale((float)weathers[i].Humidity, minHumidity, maxHumidity, 0, 1);
                 a[i - first, 9] = Scale((float)weathers[i].WindSpeed, minWindSpeed, maxWindSpeed, 0, 1);
                 a[i - first, 10] = (float)weathers[i].Clouds;
-                a[i - first, 11] = Scale((float)weathers[i].HVisibility, minHvisibility, maxHvisibility, 0, 1);
-                a[i - first, 12] = Scale((float)weathers[i].DTemperature, minDTemperature, maxDTemperature, 0, 1);
+                //a[i - first, 11] = Scale((float)weathers[i].HVisibility, minHvisibility, maxHvisibility, 0, 1);
+                //a[i - first, 12] = Scale((float)weathers[i].DTemperature, minDTemperature, maxDTemperature, 0, 1);
+                a[i - first, 11] = (float)weathers[i].SunriseSunset;
+
             }
             return a;
         }
@@ -221,6 +232,81 @@ namespace PredictionModel
             List<Weather> weathers = CrudOperations.GetAllWeather();
             DateTime start = Convert.ToDateTime(endDateTime);
             return weathers.IndexOf(weathers.Where(s => s.LocalTime.Date == start.Date).Last());
+        }
+        private Sequential GetSequentialModel()
+        {
+            var modelTraining = new Sequential();
+            TraningOptions traningOptions = new TraningOptions();
+            if (NumberOfHiddenLayers > 0)
+                modelTraining.Add(new Dense(NumberOfNeuronsInFirstHiddenLayer, input_dim: InputDim, kernel_initializer: KernelInitializer, activation: ActivationFunction));
+            if (NumberOfHiddenLayers > 1)
+            {
+                for (int i = 0; i <= NumberOfHiddenLayers - 1; i++)
+                {
+                    modelTraining.Add(new Dense(NumberOfNeuronsInOtherHiddenLayers, kernel_initializer: KernelInitializer, activation: ActivationFunction));
+                }
+            }
+            modelTraining.Add(new Dense(1, kernel_initializer: KernelInitializer));
+            return modelTraining;
+        }
+        public string TrainModel1(string dateTimeStart, string dateTimeEnd)
+        {
+
+            List<Weather> weathers = CrudOperations.GetAllWeather();
+            int NumberOfWeather = CrudOperations.GetAllWeather().Count;
+            int numberOfRowForTraining;
+            int startRowForTraning;
+            if (dateTimeStart == null && dateTimeEnd == null)
+            {
+                startRowForTraning = 0;
+                numberOfRowForTraining = (int)(trainPercentage * NumberOfWeather);
+            }
+            else
+            {
+                try
+                {
+                    startRowForTraning = GetStartIndex(dateTimeStart);
+                    numberOfRowForTraining = GetEndIndex(dateTimeEnd);
+                    if (startRowForTraning > numberOfRowForTraining)
+                    {
+                        return "Brojevi se ne poklapaku";
+                    }
+                }
+                catch
+                {
+                    return "Nepostojeci datumi";
+                }
+            }
+            float[,] TraningX = RowDataX(startRowForTraning, numberOfRowForTraining);
+            float[] TraningY = RowDataY(startRowForTraning, numberOfRowForTraining);
+            //float[,] TestX = RowDataX(numberOfRowForTraining, NumberOfWeather);
+            //float[] TestY = RowDataY()
+            var ar = Numpy.np.array(TraningX);
+            var trainy = Numpy.np.array(TraningY);
+            var trainx = Numpy.np.reshape(ar, (ar.shape[0], 1, ar.shape[1]));
+            //var trainx = ar;
+            var model = new Sequential();
+            var trainY = Numpy.np.reshape(trainy, (trainy.shape[0], 1, 1));
+            var shape = new Keras.Shape(1, 12);
+
+            model.Add(new Dense(8, activation: "relu", kernel_initializer: "normal", input_shape: shape));
+            //model.Add(new Dense(10, activation: "sigmoid", kernel_initializer: "random_normal"));
+            model.Add(new Dense(10, activation: "relu", kernel_initializer: "normal"));
+            //model.Add(new Dense(6, activation: "sigmoid", kernel_initializer: "random_normal"));
+            model.Add(new Dense(10, activation: "relu", kernel_initializer: "normal"));
+            model.Add(new Dense(10, activation: "relu", kernel_initializer: "normal"));
+            model.Add(new Dense(10, activation: "relu", kernel_initializer: "normal"));
+            model.Add(new Dense(10, activation: "relu", kernel_initializer: "normal"));
+            //model.Add(new Dense(2, activation: "sigmoid", kernel_initializer: "random_normal"));
+            model.Add(new Dense(1, kernel_initializer: "normal"));
+            model.Compile(optimizer: "adamax", loss: "mean_squared_error", metrics: new string[] { "mean_squared_error" });
+            System.Diagnostics.Debug.WriteLine("Trening start {0}", DateTime.Now);
+            var csv_logger = new CSVLogger("C:/Users/Dusan/source/repos/ElectricityConsumptionPredictor/log.csv", ";", true);
+            Callback[] callbacks = new Callback[] { csv_logger };
+            model.Fit(trainx, trainY, 4, 1000, 2, callbacks);
+            System.Diagnostics.Debug.WriteLine("Trening stop {0}", DateTime.Now);
+            model.Save("C:/Users/Dusan/Desktop/Modeli");
+            return "Uspesno treniran model";
         }
     }
 }

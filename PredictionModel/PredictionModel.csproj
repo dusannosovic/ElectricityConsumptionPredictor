@@ -70,6 +70,7 @@
     <Compile Include="PrepareData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Traning.cs" />
+    <Compile Include="TraningOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

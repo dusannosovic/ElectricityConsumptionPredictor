@@ -26,7 +26,7 @@ namespace ProjekatInteligentniInfSis.Controllers
         }
         [Route("api/Home/PostFile")]
         [HttpPost]
-        public async Task<HttpResponseMessage> PostFile()
+        public async  Task<HttpResponseMessage> PostFile()
         {
              
                     string message = "";
@@ -58,6 +58,7 @@ namespace ProjekatInteligentniInfSis.Controllers
                             if(dsexcelRecords !=null && dsexcelRecords.Tables.Count > 0 && dsexcelRecords.Tables["load"]!=null)
                             {
                                 await dataPreparer.AddDataToDatabase(dsexcelRecords,true);
+                        //dataPreparer.checkData(dsexcelRecords);
 
                             }else if (dsexcelRecords != null && dsexcelRecords.Tables.Count > 0)
                             {

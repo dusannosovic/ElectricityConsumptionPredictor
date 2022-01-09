@@ -16,15 +16,54 @@ namespace PredictionModel
         {
             DataTable dtWeather = dsexcelRecords.Tables["weather"];
             DataTable dtLoad = dsexcelRecords.Tables["load"];
+            DateTime min = Convert.ToDateTime(dtWeather.Rows[1][0].ToString());
+            DateTime max = Convert.ToDateTime(dtWeather.Rows[dtWeather.Rows.Count-1][0].ToString());
+            Dictionary<DateTime, Tuple<DateTime, DateTime>> sunriseSunset = ParseSunsetSunrise(dsexcelRecords, min, max);
             Dictionary<DateTime, Int32> Loads = new Dictionary<DateTime, int>();
             if (load)
             {
                 Loads = ParseLoadToDictionary(dtLoad);
             }
             //int count = dtWeather.Rows.Count;
-            await CrudOperations.AddWeatherEntites(ParseWeather(dtWeather, Loads,load));
+            await CrudOperations.AddWeatherEntites(ParseWeather(dtWeather, Loads,load,sunriseSunset));
         }
-        public List<Weather> ParseWeather(DataTable dtWeather, Dictionary<DateTime, Int32> loads, bool load)
+        public void checkData(DataSet dsexcelRecords)
+        {
+            DataTable dtWeather = dsexcelRecords.Tables["weather"];
+            DataTable dtLoad = dsexcelRecords.Tables["load"];
+            DateTime min = Convert.ToDateTime(dtWeather.Rows[1][0].ToString());
+            DateTime max = Convert.ToDateTime(dtWeather.Rows[dtWeather.Rows.Count - 1][0].ToString());
+            Dictionary<DateTime, Tuple<DateTime, DateTime>> sunriseSunset = ParseSunsetSunrise(dsexcelRecords, min, max);
+        }
+        public Dictionary<DateTime, Tuple<DateTime,DateTime>> ParseSunsetSunrise(DataSet dsexcelRecords,DateTime min, DateTime max)
+        {
+            Dictionary<DateTime, Tuple<DateTime, DateTime>> sunriseSunset = new Dictionary<DateTime, Tuple<DateTime, DateTime>>();
+            DateTime tempDate;
+            tempDate = min;
+            for(int i = min.Year; i <= max.Year; i++)
+            {
+                DataTable dataSS = dsexcelRecords.Tables["sunrise_sunset_"+i];
+                while (tempDate.Year == i)
+                {
+                    if (tempDate.Date <= max.Date)
+                    {
+                        DateTime minTemp = Convert.ToDateTime(dataSS.Rows[1 + tempDate.Day + ((tempDate.Month-1) / 4) * 33][1 + ((tempDate.Month-1) % 4) * 3]);
+                        DateTime maxTemp = Convert.ToDateTime(dataSS.Rows[1 + tempDate.Day + ((tempDate.Month-1) / 4) * 33][2 + ((tempDate.Month-1) % 4) * 3]);
+                        DateTime dtmin = new DateTime(tempDate.Year, tempDate.Month, tempDate.Day, minTemp.Hour, minTemp.Minute, minTemp.Second);
+                        DateTime dtmax = new DateTime(tempDate.Year, tempDate.Month, tempDate.Day, maxTemp.Hour, maxTemp.Minute, maxTemp.Second);
+                        sunriseSunset.Add(tempDate.Date, new Tuple<DateTime, DateTime>(dtmin, dtmax));
+                    }
+                    else
+                    {
+                        break;
+                    }
+                    tempDate = tempDate.AddDays(1);
+                }
+
+            }
+            return sunriseSunset;
+        }
+        public List<Weather> ParseWeather(DataTable dtWeather, Dictionary<DateTime, Int32> loads, bool load, Dictionary<DateTime, Tuple<DateTime,DateTime>>sunriseSunset)
         {
             List<Weather> weathers = new List<Weather>();
             for (int i = 1; i < dtWeather.Rows.Count; i++)
@@ -44,6 +83,17 @@ namespace PredictionModel
                         string[] date = split[0].Split('.');
                         string[] hours = split[1].Split(':');
                         weather.LocalTime = new DateTime(Int32.Parse(date[2]), Int32.Parse(date[1]), Int32.Parse(date[0]), Int32.Parse(hours[0]), Int32.Parse(hours[1]), 0);
+                        weather.SunriseSunset = 0;
+                        if (sunriseSunset[weather.LocalTime.Date].Item1.TimeOfDay + TimeSpan.FromMinutes(30) < weather.LocalTime.TimeOfDay && weather.LocalTime.TimeOfDay < sunriseSunset[weather.LocalTime.Date].Item2.TimeOfDay - TimeSpan.FromMinutes(30))
+                        {
+                            weather.SunriseSunset = 1;
+                        }else if (sunriseSunset[weather.LocalTime.Date].Item1.TimeOfDay<weather.LocalTime.TimeOfDay&& weather.LocalTime.TimeOfDay<sunriseSunset[weather.LocalTime.Date].Item1.TimeOfDay+TimeSpan.FromMinutes(30))
+                        {
+                            weather.SunriseSunset = 0.5;
+                        }else if (sunriseSunset[weather.LocalTime.Date].Item2.TimeOfDay>weather.LocalTime.TimeOfDay && weather.LocalTime.TimeOfDay>sunriseSunset[weather.LocalTime.Date].Item2.TimeOfDay-TimeSpan.FromMinutes(30))
+                        {
+                            weather.SunriseSunset = 0.5;
+                        }
 
                     }
                     if (!string.IsNullOrEmpty(dtWeather.Rows[i][1].ToString()))
@@ -389,5 +439,6 @@ namespace PredictionModel
             }
             return loads;
         }
+
     }
 }

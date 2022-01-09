@@ -111,5 +111,13 @@ namespace DataBase.Controller
                 return db.PredictionsTable.ToList();
             }
         }
+        public static void DeletePredictionTable()
+        {
+            using(var db = new DataBaseContext())
+            {
+                db.Database.ExecuteSqlCommand("TRUNCATE TABLE [PredictionsTable]");
+                db.SaveChanges();
+            }
+        }
     }
 }

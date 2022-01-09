@@ -47,6 +47,18 @@ namespace ProjekatInteligentniInfSis.Controllers
 
             return "";
         }
+        [Route("api/Optimization/GetAllDates")]
+        [HttpGet]
+        public List<string> GetAllDates()
+        {
+            List<string> d = new List<string>();
+            List<DateTime> predictions = CrudOperations.GetPredictions().Select(s=>s.Date.Date).Distinct().ToList();
+            foreach(DateTime dat in predictions)
+            {
+                d.Add(dat.Date.ToShortDateString());
+            }
+            return d;
+        }
 
     }
 }

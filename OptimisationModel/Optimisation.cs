@@ -16,11 +16,13 @@ namespace OptimisationModel
         public const double Imax = 0.001;
         public void MakeOptimization(OptimizationData optimizationData)
         {
-            List<Prediction> predictions = CrudOperations.GetPredictions();
-            List<PowerPlant> powerPlants = CrudOperations.GetPowerPlants();
+            DateTime dateFromString = Convert.ToDateTime(optimizationData.DateString);
+            List<Prediction> predictions = CrudOperations.GetPredictions().Where(s => s.Date.Date == dateFromString.Date).ToList();
+            //List<PowerPlant> powerPlants = CrudOperations.GetPowerPlants();
+           
             foreach (Prediction prediction in predictions)
             {
-                PrepareRenewable(prediction, powerPlants);
+                PrepareRenewable(prediction, optimizationData.PowerPlantsToOptimize);
             }
         }
         public void PrepareRenewable(Prediction prediction, List<PowerPlant> powerPlants)

@@ -14,7 +14,7 @@ namespace PredictionModel
         List<Weather> listOfWeathersToPredict;
         public float[,] RowDataX(List<Weather> weatherList)
         {
-            float[,] a = new float[weatherList.Count, 13];
+            float[,] a = new float[weatherList.Count, 12];
             listOfWeathersToPredict = weatherList;
             List<Weather> weathers = CrudOperations.GetAllWeather();
             float maxYear = (float)Convert.ToDouble(weathers.Select(s => s.LocalTime.Year).Max());
@@ -59,8 +59,9 @@ namespace PredictionModel
                 a[i, 8] = Scale((float)weatherList[i].Humidity, minHumidity, maxHumidity, 0, 1);
                 a[i, 9] = Scale((float)weatherList[i].WindSpeed, minWindSpeed, maxWindSpeed, 0, 1);
                 a[i, 10] = (float)weatherList[i].Clouds;
-                a[i, 11] = Scale((float)weatherList[i].HVisibility, minHvisibility, maxHvisibility, 0, 1);
-                a[i, 12] = Scale((float)weatherList[i].DTemperature, minDTemperature, maxDTemperature, 0, 1);
+                //a[i, 11] = Scale((float)weatherList[i].HVisibility, minHvisibility, maxHvisibility, 0, 1);
+                //a[i, 12] = Scale((float)weatherList[i].DTemperature, minDTemperature, maxDTemperature, 0, 1);
+                a[i, 11] = (float)weatherList[i].SunriseSunset;
             }
             return a;
         }
@@ -105,8 +106,8 @@ namespace PredictionModel
         {
             if (predictions.Count > 0)
             {
-                string url = string.Format("C:/Users/Dusan/source/repos/ElectricityConsumptionPredictor/{0}-{1}.csv", predictions.First().Date.ToString(), predictions.First().Date.ToString());
-                StreamWriter sw = new StreamWriter("C:/Users/Dusan/source/repos/ElectricityConsumptionPredictor/predictionCsv/predictions.csv", false);
+                string url = string.Format("C:/Users/Dusan/source/repos/ElectricityConsumptionPredictor/predictionCsv/{0}{1}{2}-{3}{4}{5}.csv", predictions.First().Date.Year, predictions.First().Date.Month, predictions.First().Date.Day, predictions.Last().Date.Year, predictions.Last().Date.Month, predictions.Last().Date.Day);
+                StreamWriter sw = new StreamWriter(url, false);
                 sw.Write("Time");
                 sw.Write(",");
                 sw.Write("Load");
