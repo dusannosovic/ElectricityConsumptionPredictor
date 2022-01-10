@@ -55,3 +55,7 @@ C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\D
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.powrplnt.resources
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.sunriseSunset.resources
 C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.sunriseSunset1.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.optimised_data.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.optimiseddataandoptdataperhour.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.addedcoststooptimizaddata.resources
+C:\Users\Dusan\source\repos\ElectricityConsumptionPredictor\DataBase\obj\Debug\DataBase.Migrations.addedcoststooptimizaddatanullable.resources

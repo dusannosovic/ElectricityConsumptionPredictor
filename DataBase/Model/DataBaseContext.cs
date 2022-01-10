@@ -21,7 +21,10 @@ namespace DataBase.Model
             modelBuilder.Entity<Weather>().ToTable("WeatherTable");
             modelBuilder.Entity<PowerPlant>().ToTable("PowerPlantsTable");
             modelBuilder.Entity<Prediction>().ToTable("PredictionsTable");
+
+            modelBuilder.Entity<OptimizedData>().HasRequired(p => p.OptDataPerHour).WithMany(b => (ICollection<OptimizedData>)b.PwrPlantLoad);
             modelBuilder.Properties<DateTime>().Configure(c => c.HasColumnType("datetime2"));
+
         }
 
         public DbSet<Weather> WeatherTable { get; set; }
@@ -30,6 +33,8 @@ namespace DataBase.Model
         public DbSet<PowerPlant> PowerPlantsTable { get; set; }
 
         public DbSet<Prediction> PredictionsTable { get; set; }
+        public DbSet<OptimizedData> OptimizedDataTable { get; set; }
+        public DbSet<OptimizedDataPerHour> OptimizedDataTablePerHour { get; set; }
 
 
     }

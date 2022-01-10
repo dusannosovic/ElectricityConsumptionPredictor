@@ -119,5 +119,26 @@ namespace DataBase.Controller
                 db.SaveChanges();
             }
         }
+        public static void AddOptimizedDataToTable(List<OptimizedData> optimizedData)
+        {
+            using(var db = new DataBaseContext())
+            {
+                db.OptimizedDataTable.AddRange(optimizedData);
+                db.SaveChanges();
+            }
+        }
+        public static void DeleteOptimizedData()
+        {
+            using(var db = new DataBaseContext())
+            {
+                db.Database.ExecuteSqlCommand("TRUNCATE TABLE [OptimizedDatas]");
+                List<OptimizedDataPerHour> a = db.OptimizedDataTablePerHour.ToList();
+                foreach(OptimizedDataPerHour temp in a)
+                {
+                    db.OptimizedDataTablePerHour.Remove(temp);
+                }
+                db.SaveChanges();
+            }
+        }
     }
 }

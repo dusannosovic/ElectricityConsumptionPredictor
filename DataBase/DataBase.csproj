@@ -165,10 +165,28 @@
     <Compile Include="Migrations\202201081303131_sunriseSunset1.designer.cs">
       <DependentUpon>202201081303131_sunriseSunset1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202201101306194_optimised_data.cs" />
+    <Compile Include="Migrations\202201101306194_optimised_data.designer.cs">
+      <DependentUpon>202201101306194_optimised_data.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202201101319185_optimised-dataandoptdataperhour.cs" />
+    <Compile Include="Migrations\202201101319185_optimised-dataandoptdataperhour.designer.cs">
+      <DependentUpon>202201101319185_optimised-dataandoptdataperhour.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202201101455559_added-costs-to-optimizaddata.cs" />
+    <Compile Include="Migrations\202201101455559_added-costs-to-optimizaddata.designer.cs">
+      <DependentUpon>202201101455559_added-costs-to-optimizaddata.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202201101507264_added-costs-to-optimizaddata-nullable.cs" />
+    <Compile Include="Migrations\202201101507264_added-costs-to-optimizaddata-nullable.designer.cs">
+      <DependentUpon>202201101507264_added-costs-to-optimizaddata-nullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DataBaseContext.cs" />
     <Compile Include="Model\Load.cs" />
     <Compile Include="Model\OptimizationData.cs" />
+    <Compile Include="Model\OptimizedData.cs" />
+    <Compile Include="Model\OptimizedDataPerHour.cs" />
     <Compile Include="Model\PowerPlant.cs" />
     <Compile Include="Model\Prediction.cs" />
     <Compile Include="Model\SunriseSunset.cs" />
@@ -243,6 +261,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202201081303131_sunriseSunset1.resx">
       <DependentUpon>202201081303131_sunriseSunset1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201101306194_optimised_data.resx">
+      <DependentUpon>202201101306194_optimised_data.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201101319185_optimised-dataandoptdataperhour.resx">
+      <DependentUpon>202201101319185_optimised-dataandoptdataperhour.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201101455559_added-costs-to-optimizaddata.resx">
+      <DependentUpon>202201101455559_added-costs-to-optimizaddata.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201101507264_added-costs-to-optimizaddata-nullable.resx">
+      <DependentUpon>202201101507264_added-costs-to-optimizaddata-nullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

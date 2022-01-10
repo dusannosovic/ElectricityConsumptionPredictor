@@ -19,14 +19,17 @@ namespace OptimisationModel
             DateTime dateFromString = Convert.ToDateTime(optimizationData.DateString);
             List<Prediction> predictions = CrudOperations.GetPredictions().Where(s => s.Date.Date == dateFromString.Date).ToList();
             //List<PowerPlant> powerPlants = CrudOperations.GetPowerPlants();
-           
+            CrudOperations.DeleteOptimizedData();
             foreach (Prediction prediction in predictions)
             {
-                PrepareRenewable(prediction, optimizationData.PowerPlantsToOptimize);
+                OptimizedDataPerHour optimizedDataPerHour = new OptimizedDataPerHour();
+                optimizedDataPerHour.DateAndTimeOfOptimization = prediction.Date;
+                CrudOperations.AddOptimizedDataToTable(PrepareRenewable(prediction, optimizationData.PowerPlantsToOptimize,optimizedDataPerHour));
             }
         }
-        public void PrepareRenewable(Prediction prediction, List<PowerPlant> powerPlants)
+        public List<OptimizedData> PrepareRenewable(Prediction prediction, List<PowerPlant> powerPlants,OptimizedDataPerHour optimizedDataPerHour)
         {
+            List<OptimizedData> optimizedData = new List<OptimizedData>();
             //var openWeatherAPI = new OpenWeatherAPI.OpenWeatherApiClient("06f80eb85672c812a1a6dd14d9619fc9");
             //var query = openWeatherAPI.Query("chicago");
             // System.Diagnostics.Debug.WriteLine("Oblacnost je {0}, a vetar je {1}",query.Clouds,query.Wind);
@@ -53,7 +56,7 @@ namespace OptimisationModel
             catch
             {
                 System.Diagnostics.Debug.WriteLine("Clouds is " + clouds + "wind is " + windSpeed);
-                return;
+                return null;
             }
             //var client = new WebClient();
             //var content = client.DownloadString(url);
@@ -88,7 +91,14 @@ namespace OptimisationModel
             {
                 if (powerPlant.Type == "Solar")
                 {
-                    sunPower += (int)((0.1 * Imax + 0.9 * (Imax * InsolationAngle * Math.Abs(1 - (clouds / 100)))) * powerPlant.Eff * powerPlant.MaxLoad);
+                    int tempSunPowr= (int)((0.1 * Imax + 0.9 * (Imax * InsolationAngle * Math.Abs(1 - (clouds / 100)))) * powerPlant.Eff * powerPlant.MaxLoad);
+                    sunPower += tempSunPowr;
+                    optimizedData.Add(new OptimizedData { Index = optimizedData.Count, 
+                        Load = tempSunPowr, 
+                        Name = powerPlant.Name, 
+                        OptDataPerHour = optimizedDataPerHour, 
+                        Type = powerPlant.Type });
+                    
                 }
             }
             foreach (PowerPlant powerPlant in powerPlants)
@@ -98,10 +108,27 @@ namespace OptimisationModel
                     if ((1.1 * windSpeed - 2) / 10 > 1)
                     {
                         windPower += powerPlant.MaxLoad;
+                        optimizedData.Add(new OptimizedData
+                        {
+                            Index = optimizedData.Count,
+                            Load = powerPlant.MaxLoad,
+                            Name = powerPlant.Name,
+                            OptDataPerHour = optimizedDataPerHour,
+                            Type = powerPlant.Type
+                        });
                     }
                     else if ((1.1 * windSpeed - 2) / 10 > 0)
                     {
-                        windPower += (int)(powerPlant.MaxLoad * ((1.1 * windSpeed - 2) / 10));
+                        int tempWindPower = (int)(powerPlant.MaxLoad * ((1.1 * windSpeed - 2) / 10));
+                        windPower += tempWindPower;
+                        optimizedData.Add(new OptimizedData
+                        {
+                            Index = optimizedData.Count,
+                            Load = tempWindPower,
+                            Name = powerPlant.Name,
+                            OptDataPerHour = optimizedDataPerHour,
+                            Type = powerPlant.Type
+                        });
                     }
                 }
             }
@@ -110,6 +137,14 @@ namespace OptimisationModel
                 if (powerPlant.Type == "Hydro")
                 {
                     hydroPower += powerPlant.MaxLoad;
+                    optimizedData.Add(new OptimizedData
+                    {
+                        Index = optimizedData.Count,
+                        Load = powerPlant.MaxLoad,
+                        Name = powerPlant.Name,
+                        OptDataPerHour = optimizedDataPerHour,
+                        Type = powerPlant.Type
+                    });
                 }
             }
             renewableSources = hydroPower + windPower + sunPower;
@@ -124,19 +159,70 @@ namespace OptimisationModel
             {
                 renewableCoefficient = (prediction.Predicted - powerPlantsMinPower) / renewableSources;
             }
-
-            var revenue = new DoubleVector(new double[] { 1, 2, 3 });
-            var lpProblem = new LinearProgrammingProblem(revenue);
-            CostOptimization(new List<PowerPlant>());
-
-            var r1 = new DoubleVector(1, 3, 4, 5, 6, 7, 8, 9);
+            foreach(OptimizedData pwrPlant in optimizedData)
+            {
+                pwrPlant.Load *= renewableCoefficient;
+            }
             
+            return CostOptimization(powerPlants, prediction,optimizedDataPerHour, optimizedData);
+
         }
 
-        public void CostOptimization(List<PowerPlant> powerPlants)
+        public List<OptimizedData> CostOptimization(List<PowerPlant> powerPlants, Prediction prediction,OptimizedDataPerHour optimizedDataPerHour,List<OptimizedData> optimizedData)
         {
-
-            System.Diagnostics.Debug.WriteLine("Trening start {0}", DateTime.Now);
+            //List<OptimizedData>optimizedData = new List<OptimizedData>();
+            var costFunction = new DoubleVector();
+            foreach (PowerPlant pwrPlant in powerPlants)
+            {
+                switch (pwrPlant.Type)
+                {
+                    case "Coil":
+                        costFunction.Append(-1);
+                        break;
+                    case "Oil":
+                        costFunction.Append(-2);
+                        break;
+                    default:
+                        costFunction.Append(-3);
+                        break;
+                }
+            }
+            var lpProblem = new LinearProgrammingProblem(costFunction);
+            var allPowr = new DoubleVector();
+            foreach(PowerPlant pwrPlant in powerPlants)
+            {
+                allPowr.Append(1);
+            }
+            lpProblem.AddEqualityConstraint(allPowr, 200);
+            for(int i = 0; i < powerPlants.Count; i++)
+            {
+                var tempDoubleVector = new DoubleVector();
+                for(int j = 0; j< powerPlants.Count; j++)
+                {
+                    if (i == j)
+                    {
+                        tempDoubleVector.Append(1);
+                    }
+                    else
+                    {
+                        tempDoubleVector.Append(0);
+                    }
+                }
+                lpProblem.AddUpperBoundConstraint(tempDoubleVector, powerPlants[i].MaxLoad);
+                //lpProblem.AddUpperBound(i, powerPlants[i].MaxLoad);
+                lpProblem.AddLowerBound(i, powerPlants[i].MinLoad);
+                //lpProblem.AddLowerBoundConstraint(tempDoubleVector, powerPlants[i].MinLoad);
+                //lpProblem.AddLowerBound(i, 0.0);
+            }
+            var solver = new PrimalSimplexSolver();
+            solver.Solve(lpProblem);
+            System.Diagnostics.Debug.WriteLine("solution:" + solver.OptimalX.ToString());
+            var solution = solver.OptimalX;
+            for(int i = 0; i < powerPlants.Count; i++)
+            {
+                optimizedData.Add(new OptimizedData() { Index = i, Load = solution[i],Name = powerPlants[i].Name,Type = powerPlants[i].Type,OptDataPerHour = optimizedDataPerHour});
+            }
+            return optimizedData;
         }
         public void C02Optimization()
         {

@@ -112,7 +112,7 @@ namespace PredictionModel
                 sw.Write(",");
                 sw.Write("Load");
                 sw.Write(sw.NewLine);
-                foreach (Prediction prediction in CrudOperations.GetPredictions())
+                foreach (Prediction prediction in predictions)
                 {
                     sw.Write(prediction.Date.ToString());
                     sw.Write(",");
