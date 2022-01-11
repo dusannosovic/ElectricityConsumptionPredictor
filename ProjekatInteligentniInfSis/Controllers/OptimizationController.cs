@@ -59,6 +59,44 @@ namespace ProjekatInteligentniInfSis.Controllers
             }
             return d;
         }
+        [Route("api/Optimization/GetOptimizedDataPerHour")]
+        [HttpGet]
+        public List<OptimizedPerHourBanding> GetOptimizedDataPerHours()
+        {
+            List<OptimizedDataPerHour> data = CrudOperations.GetOptimizedDataPerHour();
+            List<OptimizedPerHourBanding> optData = new List<OptimizedPerHourBanding>();
+            foreach(OptimizedDataPerHour d in data)
+            {
+                OptimizedPerHourBanding optBanding = new OptimizedPerHourBanding();
+                optBanding.DateAndTimeOfOptimization = d.DateAndTimeOfOptimization;
+                optBanding.LoadToOptimize = d.LoadToOptimize;
+                optBanding.PwrPlantLoad = new List<OptimizedBanding>();
+                foreach(OptimizedData opt in d.PwrPlantLoad)
+                {
+                    OptimizedBanding optimizedBanding = new OptimizedBanding();
+                    optimizedBanding.Costs = opt.Costs;
+                    optimizedBanding.Index = opt.Index;
+                    optimizedBanding.Load = opt.Load;
+                    optimizedBanding.Type = opt.Type;
+                    optimizedBanding.Name = opt.Name;
+                    optBanding.PwrPlantLoad.Add(optimizedBanding);
+                }
+                optData.Add(optBanding);
+            }
+            return optData;
+
+        }
+        [Route("api/Optimization/GetCoilProduction")]
+        [HttpGet]
+        public int GetCoilProduction()
+        {
+            int temp = 0;
+            foreach (OptimizedData opt in CrudOperations.GetOptimizedData().Where(s => s.Type == "Coil"))
+            {
+                temp += (int)opt.Load;
+            }
+            return temp;
+        }
 
     }
 }

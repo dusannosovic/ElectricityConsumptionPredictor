@@ -10,6 +10,7 @@ namespace DataBase.Model
     {
         public string DateString { get; set; }
         public string OptimizationType { get; set; }
+        public float WeightFactor { get; set; }
         public int FuelCostGas { get; set; }
         public int C02EmissionGas { get; set; }
         public int FuelCostOil { get; set; }

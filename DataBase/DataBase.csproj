@@ -80,7 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\CrudOperations.cs" />
+    <Compile Include="CrudOper\CrudOperations.cs" />
     <Compile Include="Migrations\202111240905397_InitialCreate.cs" />
     <Compile Include="Migrations\202111240905397_InitialCreate.designer.cs">
       <DependentUpon>202111240905397_InitialCreate.cs</DependentUpon>
@@ -181,12 +181,22 @@
     <Compile Include="Migrations\202201101507264_added-costs-to-optimizaddata-nullable.designer.cs">
       <DependentUpon>202201101507264_added-costs-to-optimizaddata-nullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202201110930283_added-loadToOptimizeToOptimizedDataPerHour.cs" />
+    <Compile Include="Migrations\202201110930283_added-loadToOptimizeToOptimizedDataPerHour.designer.cs">
+      <DependentUpon>202201110930283_added-loadToOptimizeToOptimizedDataPerHour.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202201111344236_delete_load_and_sunriseSunsetTable.cs" />
+    <Compile Include="Migrations\202201111344236_delete_load_and_sunriseSunsetTable.designer.cs">
+      <DependentUpon>202201111344236_delete_load_and_sunriseSunsetTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DataBaseContext.cs" />
     <Compile Include="Model\Load.cs" />
     <Compile Include="Model\OptimizationData.cs" />
+    <Compile Include="Model\OptimizedBanding.cs" />
     <Compile Include="Model\OptimizedData.cs" />
     <Compile Include="Model\OptimizedDataPerHour.cs" />
+    <Compile Include="Model\OptimizedPerHourBanding.cs" />
     <Compile Include="Model\PowerPlant.cs" />
     <Compile Include="Model\Prediction.cs" />
     <Compile Include="Model\SunriseSunset.cs" />
@@ -273,6 +283,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202201101507264_added-costs-to-optimizaddata-nullable.resx">
       <DependentUpon>202201101507264_added-costs-to-optimizaddata-nullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201110930283_added-loadToOptimizeToOptimizedDataPerHour.resx">
+      <DependentUpon>202201110930283_added-loadToOptimizeToOptimizedDataPerHour.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201111344236_delete_load_and_sunriseSunsetTable.resx">
+      <DependentUpon>202201111344236_delete_load_and_sunriseSunsetTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

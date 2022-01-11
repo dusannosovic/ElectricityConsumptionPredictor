@@ -20,14 +20,35 @@ namespace OptimisationModel
             List<Prediction> predictions = CrudOperations.GetPredictions().Where(s => s.Date.Date == dateFromString.Date).ToList();
             //List<PowerPlant> powerPlants = CrudOperations.GetPowerPlants();
             CrudOperations.DeleteOptimizedData();
+            string url = "https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=current,minutely,daily,alerts&appid=06f80eb85672c812a1a6dd14d9619fc9";
+            JArray dataArray;
+            JToken token;
+            double windSpeed;
+            float clouds;
+            try
+            {
+                var client = new WebClient();
+                var content = client.DownloadString(url);
+                dynamic data = JObject.Parse(content);
+                dataArray = data.hourly;
+            }
+            catch
+            {
+                System.Diagnostics.Debug.WriteLine("Clouds is " + clouds + "wind is " + windSpeed);
+                return;
+            }
+
             foreach (Prediction prediction in predictions)
             {
                 OptimizedDataPerHour optimizedDataPerHour = new OptimizedDataPerHour();
                 optimizedDataPerHour.DateAndTimeOfOptimization = prediction.Date;
-                CrudOperations.AddOptimizedDataToTable(PrepareRenewable(prediction, optimizationData.PowerPlantsToOptimize,optimizedDataPerHour));
+                token = dataArray[prediction.Date.Hour];
+                clouds = (float)double.Parse(token["clouds"].ToString());
+                windSpeed = double.Parse(token["wind_speed"].ToString());
+                CrudOperations.AddOptimizedDataToTable(PrepareRenewable(prediction, optimizationData.PowerPlantsToOptimize,optimizedDataPerHour, optimizationData.OptimizationType, optimizationData.WeightFactor,clouds,windSpeed));
             }
         }
-        public List<OptimizedData> PrepareRenewable(Prediction prediction, List<PowerPlant> powerPlants,OptimizedDataPerHour optimizedDataPerHour)
+        public List<OptimizedData> PrepareRenewable(Prediction prediction, List<PowerPlant> powerPlants,OptimizedDataPerHour optimizedDataPerHour,string optimizationType,float weightFactor,float clouds,double windSpeed)
         {
             List<OptimizedData> optimizedData = new List<OptimizedData>();
             //var openWeatherAPI = new OpenWeatherAPI.OpenWeatherApiClient("06f80eb85672c812a1a6dd14d9619fc9");
@@ -40,7 +61,7 @@ namespace OptimisationModel
             //string url = "http://api.openweathermap.org/data/2.5/forecast?q=belgrade&appid=06f80eb85672c812a1a6dd14d9619fc9";
             
             string url = "https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=current,minutely,daily,alerts&appid=06f80eb85672c812a1a6dd14d9619fc9";
-            JArray dataArray;
+            /*JArray dataArray;
             JToken token;
             double windSpeed;
             float clouds;
@@ -57,7 +78,7 @@ namespace OptimisationModel
             {
                 System.Diagnostics.Debug.WriteLine("Clouds is " + clouds + "wind is " + windSpeed);
                 return null;
-            }
+            }*/
             //var client = new WebClient();
             //var content = client.DownloadString(url);
             //dynamic data = JObject.Parse(content);
@@ -163,13 +184,48 @@ namespace OptimisationModel
             {
                 pwrPlant.Load *= renewableCoefficient;
             }
-            
-            return CostOptimization(powerPlants, prediction,optimizedDataPerHour, optimizedData);
+            List<PowerPlant> notrenewablePowrPlants = new List<PowerPlant>();
+            notrenewablePowrPlants.AddRange(powerPlants.Where(s => s.Type == "Coil").ToList());
+            notrenewablePowrPlants.AddRange(powerPlants.Where(s => s.Type == "Oil").ToList());
+            notrenewablePowrPlants.AddRange(powerPlants.Where(s => s.Type == "Gas").ToList());
+            if (optimizationType == "CostOptimization")
+            {
+                optimizedData.AddRange(CostOptimization(notrenewablePowrPlants, prediction, optimizedDataPerHour));
+                return optimizedData;
+            }else if(optimizationType == "EmmisionOptimization")
+            {
+                optimizedData.AddRange(C02Optimization(notrenewablePowrPlants, prediction, optimizedDataPerHour));
+                return optimizedData;
+            }
+            else
+            {
+                weightFactor = (float)0.5;
+                float weightFC02 = 1 - weightFactor;
+                List<OptimizedData> optimizedDataCost = new List<OptimizedData>();
+                optimizedDataCost.AddRange(CostOptimization(notrenewablePowrPlants, prediction, optimizedDataPerHour));
+                List<OptimizedData> optimizedDataC02 = new List<OptimizedData>();
+                optimizedDataC02.AddRange(C02Optimization(notrenewablePowrPlants, prediction, optimizedDataPerHour));
+                foreach(OptimizedData optData in optimizedDataCost)
+                {
+                    optData.Load = optData.Load * weightFactor;
+                }
+                foreach(OptimizedData optData in optimizedDataC02)
+                {
+                    optData.Load = optData.Load * weightFC02;
+                }
+                for(int i = 0; i < optimizedDataCost.Count; i++)
+                {
+                    optimizedDataCost[i].Load += optimizedDataC02[i].Load;
+                }
+                optimizedData.AddRange(optimizedDataCost);
+                return optimizedData;
+            }
 
         }
 
-        public List<OptimizedData> CostOptimization(List<PowerPlant> powerPlants, Prediction prediction,OptimizedDataPerHour optimizedDataPerHour,List<OptimizedData> optimizedData)
+        public List<OptimizedData> CostOptimization(List<PowerPlant> powerPlants, Prediction prediction,OptimizedDataPerHour optimizedDataPerHour)
         {
+            List<OptimizedData> optimizedData = new List<OptimizedData>();
             //List<OptimizedData>optimizedData = new List<OptimizedData>();
             var costFunction = new DoubleVector();
             foreach (PowerPlant pwrPlant in powerPlants)
@@ -224,8 +280,61 @@ namespace OptimisationModel
             }
             return optimizedData;
         }
-        public void C02Optimization()
+        public List<OptimizedData> C02Optimization(List<PowerPlant> powerPlants, Prediction prediction, OptimizedDataPerHour optimizedDataPerHour)
         {
+            List<OptimizedData> optimizedData = new List<OptimizedData>();
+            var costFunction = new DoubleVector();
+            foreach (PowerPlant pwrPlant in powerPlants)
+            {
+                switch (pwrPlant.Type)
+                {
+                    case "Coil":
+                        costFunction.Append(-3);
+                        break;
+                    case "Oil":
+                        costFunction.Append(-2);
+                        break;
+                    default:
+                        costFunction.Append(-1);
+                        break;
+                }
+            }
+            var lpProblem = new LinearProgrammingProblem(costFunction);
+            var allPowr = new DoubleVector();
+            foreach (PowerPlant pwrPlant in powerPlants)
+            {
+                allPowr.Append(1);
+            }
+            lpProblem.AddEqualityConstraint(allPowr, 200);
+            for (int i = 0; i < powerPlants.Count; i++)
+            {
+                var tempDoubleVector = new DoubleVector();
+                for (int j = 0; j < powerPlants.Count; j++)
+                {
+                    if (i == j)
+                    {
+                        tempDoubleVector.Append(1);
+                    }
+                    else
+                    {
+                        tempDoubleVector.Append(0);
+                    }
+                }
+                lpProblem.AddUpperBoundConstraint(tempDoubleVector, powerPlants[i].MaxLoad);
+                //lpProblem.AddUpperBound(i, powerPlants[i].MaxLoad);
+                lpProblem.AddLowerBound(i, powerPlants[i].MinLoad);
+                //lpProblem.AddLowerBoundConstraint(tempDoubleVector, powerPlants[i].MinLoad);
+                //lpProblem.AddLowerBound(i, 0.0);
+            }
+            var solver = new PrimalSimplexSolver();
+            solver.Solve(lpProblem);
+            System.Diagnostics.Debug.WriteLine("solution:" + solver.OptimalX.ToString());
+            var solution = solver.OptimalX;
+            for (int i = 0; i < powerPlants.Count; i++)
+            {
+                optimizedData.Add(new OptimizedData() { Index = i, Load = solution[i], Name = powerPlants[i].Name, Type = powerPlants[i].Type, OptDataPerHour = optimizedDataPerHour });
+            }
+            return optimizedData;
 
         }
 

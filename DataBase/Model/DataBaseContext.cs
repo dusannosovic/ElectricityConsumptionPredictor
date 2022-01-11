@@ -11,13 +11,12 @@ namespace DataBase.Model
     {
         public DataBaseContext() : base("SystemMonitoringDatabase")
         {
-           
+            //Configuration.ProxyCreationEnabled = false;  
+            Configuration.LazyLoadingEnabled = false;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Load>().ToTable("LoadTable");
-            modelBuilder.Entity<SunriseSunset>().ToTable("SunriseSunsetTable");
             modelBuilder.Entity<Weather>().ToTable("WeatherTable");
             modelBuilder.Entity<PowerPlant>().ToTable("PowerPlantsTable");
             modelBuilder.Entity<Prediction>().ToTable("PredictionsTable");
@@ -28,8 +27,6 @@ namespace DataBase.Model
         }
 
         public DbSet<Weather> WeatherTable { get; set; }
-        public DbSet<Load> LoadTable { get; set; }
-        public DbSet<SunriseSunset> SunriseSunsetTable { get; set; }
         public DbSet<PowerPlant> PowerPlantsTable { get; set; }
 
         public DbSet<Prediction> PredictionsTable { get; set; }
