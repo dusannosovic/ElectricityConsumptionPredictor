@@ -20,10 +20,11 @@ namespace ProjekatInteligentniInfSis.Controllers
         {
             var request = HttpContext.Current.Request;
             if (powerPlant.Type=="Solar") {
-                powerPlant.MaxLoad = (int)(powerPlant.Area * maxSunInsolation);
+
                 powerPlant.Eff = powerPlant.Eff / 100;
+                powerPlant.MaxLoad = (int)(powerPlant.Area * maxSunInsolation*powerPlant.Eff);
             }
-            if (powerPlant.Type == "wind")
+            if (powerPlant.Type == "Wind")
             {
                 powerPlant.MaxLoad = (int)(powerPlant.Area * windTurbinePowerPerSquareMeter);
             }

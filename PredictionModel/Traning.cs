@@ -207,15 +207,6 @@ namespace PredictionModel
             //testPredict.
             return String.Format("Absolut {0}%", (sum / tuple.Count) * 100) + string.Format("Squared {0}%", Math.Sqrt(sumRmse / tuple.Count) * 100);
         }
-        public float getMaxLoad()
-        {
-
-            return (float)Convert.ToDouble(CrudOperations.GetAllWeather().Select(s => s.Load).Max());
-        }
-        public float getMinLoad()
-        {
-            return (float)Convert.ToDouble(CrudOperations.GetAllWeather().Select(s => s.Load).Max());
-        }
         private float Scale(float value, float min, float max, float minScale, float maxScale)
         {
             float scaled = minScale + (value - min) / (max - min) * (maxScale - minScale);

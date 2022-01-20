@@ -189,6 +189,10 @@
     <Compile Include="Migrations\202201111344236_delete_load_and_sunriseSunsetTable.designer.cs">
       <DependentUpon>202201111344236_delete_load_and_sunriseSunsetTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202201181031189_C02ToOptimizedData.cs" />
+    <Compile Include="Migrations\202201181031189_C02ToOptimizedData.designer.cs">
+      <DependentUpon>202201181031189_C02ToOptimizedData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\DataBaseContext.cs" />
     <Compile Include="Model\Load.cs" />
@@ -289,6 +293,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202201111344236_delete_load_and_sunriseSunsetTable.resx">
       <DependentUpon>202201111344236_delete_load_and_sunriseSunsetTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201181031189_C02ToOptimizedData.resx">
+      <DependentUpon>202201181031189_C02ToOptimizedData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

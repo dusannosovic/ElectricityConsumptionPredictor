@@ -17,6 +17,9 @@ namespace DataBase.Model
         public int FuelCostCoal { get; set; }
         public int C02EmissionOil { get; set; }
         public int C02EmissionCoal { get; set; }
+        public double Numerator { get; set; }
+        public double Denominator { get; set; }
+        public double Multipler { get; set; }
         public List<PowerPlant> PowerPlantsToOptimize { get; set; }
     }
 }

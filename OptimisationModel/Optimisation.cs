@@ -45,43 +45,18 @@ namespace OptimisationModel
                 token = dataArray[prediction.Date.Hour];
                 clouds = (float)double.Parse(token["clouds"].ToString());
                 windSpeed = double.Parse(token["wind_speed"].ToString());
-                CrudOperations.AddOptimizedDataToTable(PrepareRenewable(prediction, optimizationData.PowerPlantsToOptimize,optimizedDataPerHour, optimizationData.OptimizationType, optimizationData.WeightFactor,clouds,windSpeed));
+                CrudOperations.AddOptimizedDataToTable(PrepareRenewable(prediction, optimizationData,optimizedDataPerHour,clouds,windSpeed));
             }
         }
-        public List<OptimizedData> PrepareRenewable(Prediction prediction, List<PowerPlant> powerPlants,OptimizedDataPerHour optimizedDataPerHour,string optimizationType,float weightFactor,float clouds,double windSpeed)
+        public List<OptimizedData> PrepareRenewable(Prediction prediction, OptimizationData optimizationData,OptimizedDataPerHour optimizedDataPerHour,float clouds,double windSpeed)
         {
+            List<PowerPlant> powerPlants = optimizationData.PowerPlantsToOptimize;
+            string optimizationType = optimizationData.OptimizationType;
             List<OptimizedData> optimizedData = new List<OptimizedData>();
-            //var openWeatherAPI = new OpenWeatherAPI.OpenWeatherApiClient("06f80eb85672c812a1a6dd14d9619fc9");
-            //var query = openWeatherAPI.Query("chicago");
-            // System.Diagnostics.Debug.WriteLine("Oblacnost je {0}, a vetar je {1}",query.Clouds,query.Wind);
             DateTime dt = new DateTime(1970,1,1);
             DateTime dtTemp = prediction.Date.AddDays(-1);
             double seconds = (dtTemp-dt).TotalSeconds;
-            //string url = string.Format("http://api.openweathermap.org/data/2.5/onecall/timemachine?lat=60.99&lon=30.9&dt={0}&appid=06f80eb85672c812a1a6dd14d9619fc9",seconds);
-            //string url = "http://api.openweathermap.org/data/2.5/forecast?q=belgrade&appid=06f80eb85672c812a1a6dd14d9619fc9";
-            
-            string url = "https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=current,minutely,daily,alerts&appid=06f80eb85672c812a1a6dd14d9619fc9";
-            /*JArray dataArray;
-            JToken token;
-            double windSpeed;
-            float clouds;
-            try {
-                var client = new WebClient();
-                var content = client.DownloadString(url);
-                dynamic data = JObject.Parse(content);
-                dataArray = data.hourly;
-                token = dataArray[prediction.Date.Hour];
-                clouds = (float)double.Parse(token["clouds"].ToString());
-                windSpeed = double.Parse(token["wind_speed"].ToString());
-            }
-            catch
-            {
-                System.Diagnostics.Debug.WriteLine("Clouds is " + clouds + "wind is " + windSpeed);
-                return null;
-            }*/
-            //var client = new WebClient();
-            //var content = client.DownloadString(url);
-            //dynamic data = JObject.Parse(content);
+            float weightFactor = optimizationData.WeightFactor;
 
             int sunPower = 0;
             int windPower = 0;
@@ -89,15 +64,6 @@ namespace OptimisationModel
             float renewableCoefficient = 1;
             int powerPlantsMinPower = 0;
             int renewableSources = 0;
-
-           
-            //JArray dataArray = data.hourly;
-            //JToken token = dataArray[prediction.Date.Hour];
-            //float clouds = (float)double.Parse(token["clouds"].ToString());
-            //double windSpeed = double.Parse(token["wind_speed"].ToString());
-
-            //string wind = data.wind.speed;
-            //double windSpeed = Convert.ToDouble(wind);
             System.Diagnostics.Debug.WriteLine("Clouds is " + clouds + "wind is " + windSpeed);
 
             int hour = (prediction.Date.Hour + 5) % 24;
@@ -112,7 +78,7 @@ namespace OptimisationModel
             {
                 if (powerPlant.Type == "Solar")
                 {
-                    int tempSunPowr= (int)((0.1 * Imax + 0.9 * (Imax * InsolationAngle * Math.Abs(1 - (clouds / 100)))) * powerPlant.Eff * powerPlant.MaxLoad);
+                    int tempSunPowr= (int)((0.1  + 0.9 * (InsolationAngle * Math.Abs(1 - (clouds / 100))))  * powerPlant.MaxLoad);
                     sunPower += tempSunPowr;
                     optimizedData.Add(new OptimizedData { Index = optimizedData.Count, 
                         Load = tempSunPowr, 
@@ -141,6 +107,19 @@ namespace OptimisationModel
                     else if ((1.1 * windSpeed - 2) / 10 > 0)
                     {
                         int tempWindPower = (int)(powerPlant.MaxLoad * ((1.1 * windSpeed - 2) / 10));
+                        windPower += tempWindPower;
+                        optimizedData.Add(new OptimizedData
+                        {
+                            Index = optimizedData.Count,
+                            Load = tempWindPower,
+                            Name = powerPlant.Name,
+                            OptDataPerHour = optimizedDataPerHour,
+                            Type = powerPlant.Type
+                        });
+                    }
+                    else
+                    {
+                        int tempWindPower = 0;
                         windPower += tempWindPower;
                         optimizedData.Add(new OptimizedData
                         {
@@ -184,27 +163,79 @@ namespace OptimisationModel
             {
                 pwrPlant.Load *= renewableCoefficient;
             }
+            foreach(OptimizedData opt in optimizedData)
+            {
+                if(opt.Type == "Hydro")
+                {
+                    opt.Costs = (int)(opt.Load * 0.5);
+                }
+            }
             List<PowerPlant> notrenewablePowrPlants = new List<PowerPlant>();
-            notrenewablePowrPlants.AddRange(powerPlants.Where(s => s.Type == "Coil").ToList());
-            notrenewablePowrPlants.AddRange(powerPlants.Where(s => s.Type == "Oil").ToList());
-            notrenewablePowrPlants.AddRange(powerPlants.Where(s => s.Type == "Gas").ToList());
+            notrenewablePowrPlants.AddRange(powerPlants.Where(s => s.Type == "Coil" || s.Type == "Oil" || s.Type == "Gas").ToList());
+            //notrenewablePowrPlants.AddRange(powerPlants.Where(s => s.Type == "Oil").ToList());
+            //notrenewablePowrPlants.AddRange(powerPlants.Where(s => s.Type == "Gas").ToList());
+            optimizedDataPerHour.LoadToOptimize = prediction.Predicted;
             if (optimizationType == "CostOptimization")
             {
-                optimizedData.AddRange(CostOptimization(notrenewablePowrPlants, prediction, optimizedDataPerHour));
+                List<OptimizedData> optData = CostOptimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted - renewableSources, optimizationData);
+                for (int i = 0; i < notrenewablePowrPlants.Count; i++)
+                {
+                    float temp = Scale((float)optData[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 2, 8);
+                    double tempC02 = Math.Pow(1 / 5 * temp,2);
+                    if (optData[i].Type == "Oil")
+                    {
+                        optData[i].Costs = (int)((optimizationData.Multipler*((optimizationData.Numerator*8) / (temp*optimizationData.Denominator)) * optimizationData.FuelCostOil)*optData[i].Load);
+                        optData[i].C02 = (int)(((0.5+tempC02) * optimizationData.C02EmissionOil)*optData[i].Load);
+                    }
+                    else if (optData[i].Type == "Gas")
+                    {
+                        optData[i].Costs = (int)((optimizationData.Multipler*((optimizationData.Numerator*8) / (temp*optimizationData.Denominator)) * optimizationData.FuelCostGas)*optData[i].Load);
+                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optData[i].Load);
+                    }
+                    else
+                    {
+                        optData[i].Costs = (int)((optimizationData.Multipler*((optimizationData.Numerator*8) / (temp*optimizationData.Denominator)) * optimizationData.FuelCostCoal)*optData[i].Load);
+                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optData[i].Load);
+                    }
+
+                }
+                optimizedData.AddRange(optData);
                 return optimizedData;
             }else if(optimizationType == "EmmisionOptimization")
             {
-                optimizedData.AddRange(C02Optimization(notrenewablePowrPlants, prediction, optimizedDataPerHour));
+                List<OptimizedData> optData = C02Optimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted - renewableSources, optimizationData);
+                for (int i = 0; i < notrenewablePowrPlants.Count; i++)
+                {
+                    float temp = Scale((float)optData[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 2, 8);
+                    double tempC02 = Math.Pow(1 / 5 * temp, 2);
+                    if (optData[i].Type == "Oil")
+                    {
+                        optData[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostOil) * optData[i].Load);
+                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optData[i].Load);
+                    }
+                    else if (optData[i].Type == "Gas")
+                    {
+                        optData[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostGas) * optData[i].Load);
+                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optData[i].Load);
+                    }
+                    else
+                    {
+                        optData[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostCoal) * optData[i].Load);
+                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optData[i].Load);
+                    }
+
+                }
+                optimizedData.AddRange(optData);
                 return optimizedData;
             }
             else
             {
-                weightFactor = (float)0.5;
+                //weightFactor = (float)0.5;
                 float weightFC02 = 1 - weightFactor;
                 List<OptimizedData> optimizedDataCost = new List<OptimizedData>();
-                optimizedDataCost.AddRange(CostOptimization(notrenewablePowrPlants, prediction, optimizedDataPerHour));
+                optimizedDataCost.AddRange(CostOptimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted-renewableSources, optimizationData));
                 List<OptimizedData> optimizedDataC02 = new List<OptimizedData>();
-                optimizedDataC02.AddRange(C02Optimization(notrenewablePowrPlants, prediction, optimizedDataPerHour));
+                optimizedDataC02.AddRange(C02Optimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted - renewableSources, optimizationData));
                 foreach(OptimizedData optData in optimizedDataCost)
                 {
                     optData.Load = optData.Load * weightFactor;
@@ -217,13 +248,33 @@ namespace OptimisationModel
                 {
                     optimizedDataCost[i].Load += optimizedDataC02[i].Load;
                 }
+                for(int i =0; i < notrenewablePowrPlants.Count; i++) {
+                    float temp = Scale((float)optimizedDataCost[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 2, 8);
+                    double tempC02 = Math.Pow(1 / 5 * temp, 2);
+                    if (optimizedDataCost[i].Type=="Oil")
+                    {
+                        optimizedDataCost[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostOil) * optimizedDataCost[i].Load);
+                        optimizedDataCost[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optimizedDataCost[i].Load);
+                    }
+                    else if (optimizedDataCost[i].Type == "Gas")
+                    {
+                        optimizedDataCost[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostGas) * optimizedDataCost[i].Load); ;
+                        optimizedDataCost[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optimizedDataCost[i].Load);
+                    }
+                    else
+                    {
+                        optimizedDataCost[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostCoal) * optimizedDataCost[i].Load);
+                        optimizedDataCost[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optimizedDataCost[i].Load);
+                    }
+                    
+                }
                 optimizedData.AddRange(optimizedDataCost);
                 return optimizedData;
             }
 
         }
 
-        public List<OptimizedData> CostOptimization(List<PowerPlant> powerPlants, Prediction prediction,OptimizedDataPerHour optimizedDataPerHour)
+        public List<OptimizedData> CostOptimization(List<PowerPlant> powerPlants, Prediction prediction,OptimizedDataPerHour optimizedDataPerHour, float valueToOptimize, OptimizationData optimizationData)
         {
             List<OptimizedData> optimizedData = new List<OptimizedData>();
             //List<OptimizedData>optimizedData = new List<OptimizedData>();
@@ -232,14 +283,14 @@ namespace OptimisationModel
             {
                 switch (pwrPlant.Type)
                 {
-                    case "Coil":
-                        costFunction.Append(-1);
+                    case "Gas":
+                        costFunction.Append(-optimizationData.FuelCostGas);
                         break;
                     case "Oil":
-                        costFunction.Append(-2);
+                        costFunction.Append(-optimizationData.FuelCostOil);
                         break;
                     default:
-                        costFunction.Append(-3);
+                        costFunction.Append(-optimizationData.FuelCostCoal);
                         break;
                 }
             }
@@ -249,7 +300,7 @@ namespace OptimisationModel
             {
                 allPowr.Append(1);
             }
-            lpProblem.AddEqualityConstraint(allPowr, 200);
+            lpProblem.AddEqualityConstraint(allPowr, valueToOptimize);
             for(int i = 0; i < powerPlants.Count; i++)
             {
                 var tempDoubleVector = new DoubleVector();
@@ -280,7 +331,7 @@ namespace OptimisationModel
             }
             return optimizedData;
         }
-        public List<OptimizedData> C02Optimization(List<PowerPlant> powerPlants, Prediction prediction, OptimizedDataPerHour optimizedDataPerHour)
+        public List<OptimizedData> C02Optimization(List<PowerPlant> powerPlants, Prediction prediction, OptimizedDataPerHour optimizedDataPerHour, float valueToOptimize, OptimizationData optimizationData)
         {
             List<OptimizedData> optimizedData = new List<OptimizedData>();
             var costFunction = new DoubleVector();
@@ -288,14 +339,14 @@ namespace OptimisationModel
             {
                 switch (pwrPlant.Type)
                 {
-                    case "Coil":
-                        costFunction.Append(-3);
+                    case "Gas":
+                        costFunction.Append(-optimizationData.C02EmissionGas);
                         break;
                     case "Oil":
-                        costFunction.Append(-2);
+                        costFunction.Append(-optimizationData.C02EmissionOil);
                         break;
                     default:
-                        costFunction.Append(-1);
+                        costFunction.Append(-optimizationData.C02EmissionCoal);
                         break;
                 }
             }
@@ -305,7 +356,7 @@ namespace OptimisationModel
             {
                 allPowr.Append(1);
             }
-            lpProblem.AddEqualityConstraint(allPowr, 200);
+            lpProblem.AddEqualityConstraint(allPowr, valueToOptimize);
             for (int i = 0; i < powerPlants.Count; i++)
             {
                 var tempDoubleVector = new DoubleVector();
