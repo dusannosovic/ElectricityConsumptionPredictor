@@ -80,6 +80,7 @@ namespace ProjekatInteligentniInfSis.Controllers
                     optimizedBanding.Load = opt.Load;
                     optimizedBanding.Type = opt.Type;
                     optimizedBanding.Name = opt.Name;
+                    optimizedBanding.C02 = opt.C02;
                     optBanding.PwrPlantLoad.Add(optimizedBanding);
                 }
                 optData.Add(optBanding);

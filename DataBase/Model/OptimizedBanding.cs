@@ -13,5 +13,6 @@ namespace DataBase.Model
         public string Type { get; set; }
         public double Load { get; set; }
         public int? Costs { get; set; }
+        public int? C02 { get; set; }
     }
 }

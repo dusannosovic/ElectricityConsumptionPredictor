@@ -14,8 +14,10 @@ namespace OptimisationModel
     public class Optimisation
     {
         public const double Imax = 0.001;
+        
         public void MakeOptimization(OptimizationData optimizationData)
         {
+            var doubleVector = new DoubleVector();
             DateTime dateFromString = Convert.ToDateTime(optimizationData.DateString);
             List<Prediction> predictions = CrudOperations.GetPredictions().Where(s => s.Date.Date == dateFromString.Date).ToList();
             //List<PowerPlant> powerPlants = CrudOperations.GetPowerPlants();
@@ -180,8 +182,9 @@ namespace OptimisationModel
                 List<OptimizedData> optData = CostOptimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted - renewableSources, optimizationData);
                 for (int i = 0; i < notrenewablePowrPlants.Count; i++)
                 {
-                    float temp = Scale((float)optData[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 2, 8);
-                    double tempC02 = Math.Pow(1 / 5 * temp,2);
+                    float temp = Scale((float)optData[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 8, 16);
+                    double C02Func =  temp/5;
+                    double tempC02 = Math.Pow(C02Func,2);
                     if (optData[i].Type == "Oil")
                     {
                         optData[i].Costs = (int)((optimizationData.Multipler*((optimizationData.Numerator*8) / (temp*optimizationData.Denominator)) * optimizationData.FuelCostOil)*optData[i].Load);
@@ -190,12 +193,12 @@ namespace OptimisationModel
                     else if (optData[i].Type == "Gas")
                     {
                         optData[i].Costs = (int)((optimizationData.Multipler*((optimizationData.Numerator*8) / (temp*optimizationData.Denominator)) * optimizationData.FuelCostGas)*optData[i].Load);
-                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optData[i].Load);
+                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionGas) * optData[i].Load);
                     }
                     else
                     {
                         optData[i].Costs = (int)((optimizationData.Multipler*((optimizationData.Numerator*8) / (temp*optimizationData.Denominator)) * optimizationData.FuelCostCoal)*optData[i].Load);
-                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optData[i].Load);
+                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionCoal) * optData[i].Load);
                     }
 
                 }
@@ -206,8 +209,9 @@ namespace OptimisationModel
                 List<OptimizedData> optData = C02Optimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted - renewableSources, optimizationData);
                 for (int i = 0; i < notrenewablePowrPlants.Count; i++)
                 {
-                    float temp = Scale((float)optData[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 2, 8);
-                    double tempC02 = Math.Pow(1 / 5 * temp, 2);
+                    float temp = Scale((float)optData[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 8, 16);
+                    double C02Func = temp/5;
+                    double tempC02 = Math.Pow(C02Func, 2);
                     if (optData[i].Type == "Oil")
                     {
                         optData[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostOil) * optData[i].Load);
@@ -216,12 +220,12 @@ namespace OptimisationModel
                     else if (optData[i].Type == "Gas")
                     {
                         optData[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostGas) * optData[i].Load);
-                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optData[i].Load);
+                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionGas) * optData[i].Load);
                     }
                     else
                     {
                         optData[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostCoal) * optData[i].Load);
-                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optData[i].Load);
+                        optData[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionCoal) * optData[i].Load);
                     }
 
                 }
@@ -249,8 +253,9 @@ namespace OptimisationModel
                     optimizedDataCost[i].Load += optimizedDataC02[i].Load;
                 }
                 for(int i =0; i < notrenewablePowrPlants.Count; i++) {
-                    float temp = Scale((float)optimizedDataCost[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 2, 8);
-                    double tempC02 = Math.Pow(1 / 5 * temp, 2);
+                    float temp = Scale((float)optimizedDataCost[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 8, 16);
+                    double C02Func = temp/5;
+                    double tempC02 = Math.Pow(C02Func, 2);
                     if (optimizedDataCost[i].Type=="Oil")
                     {
                         optimizedDataCost[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostOil) * optimizedDataCost[i].Load);
@@ -259,12 +264,12 @@ namespace OptimisationModel
                     else if (optimizedDataCost[i].Type == "Gas")
                     {
                         optimizedDataCost[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostGas) * optimizedDataCost[i].Load); ;
-                        optimizedDataCost[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optimizedDataCost[i].Load);
+                        optimizedDataCost[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionGas) * optimizedDataCost[i].Load);
                     }
                     else
                     {
                         optimizedDataCost[i].Costs = (int)((optimizationData.Multipler * ((optimizationData.Numerator * 8) / (temp * optimizationData.Denominator)) * optimizationData.FuelCostCoal) * optimizedDataCost[i].Load);
-                        optimizedDataCost[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionOil) * optimizedDataCost[i].Load);
+                        optimizedDataCost[i].C02 = (int)(((0.5 + tempC02) * optimizationData.C02EmissionCoal) * optimizedDataCost[i].Load);
                     }
                     
                 }
@@ -323,7 +328,7 @@ namespace OptimisationModel
             }
             var solver = new PrimalSimplexSolver();
             solver.Solve(lpProblem);
-            System.Diagnostics.Debug.WriteLine("solution:" + solver.OptimalX.ToString());
+            //System.Diagnostics.Debug.WriteLine("solution:" + solver.OptimalX.ToString());
             var solution = solver.OptimalX;
             for(int i = 0; i < powerPlants.Count; i++)
             {
@@ -379,7 +384,7 @@ namespace OptimisationModel
             }
             var solver = new PrimalSimplexSolver();
             solver.Solve(lpProblem);
-            System.Diagnostics.Debug.WriteLine("solution:" + solver.OptimalX.ToString());
+            //System.Diagnostics.Debug.WriteLine("solution:" + solver.OptimalX.ToString());
             var solution = solver.OptimalX;
             for (int i = 0; i < powerPlants.Count; i++)
             {
