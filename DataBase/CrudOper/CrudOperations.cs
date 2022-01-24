@@ -78,7 +78,8 @@ namespace DataBase.Controller
                 {
                     if (db.PredictionsTable.Select(s=>s.Date).Contains(pred.Date))
                     {
-                        db.PredictionsTable.Remove(pred);
+                        Prediction prediction = db.PredictionsTable.Where(s => s.Date == pred.Date).FirstOrDefault();
+                        db.PredictionsTable.Remove(prediction);
                     }
                     db.PredictionsTable.Add(pred);
                 }

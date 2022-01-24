@@ -25,13 +25,13 @@ namespace ProjekatInteligentniInfSis.Controllers
             if(dateTimeStart!= null && dateTimeEnd != null)
             {
 
-                //return tr.TrainModel(dateTimeStart,dateTimeEnd);
-                return tr.TrainModel1(dateTimeStart, dateTimeEnd);
+                return tr.TrainModel(dateTimeStart,dateTimeEnd);
+                //return tr.TrainModel1(dateTimeStart, dateTimeEnd);
             }
             else
             {
-                return tr.TrainModel1(dateTimeStart, dateTimeEnd);
-                //return tr.TrainModel(null, null);
+                //return tr.TrainModel1(dateTimeStart, dateTimeEnd);
+                return tr.TrainModel(null, null);
             }
 
             //tr.Predict();

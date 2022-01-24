@@ -17,6 +17,10 @@ namespace OptimisationModel
         
         public void MakeOptimization(OptimizationData optimizationData)
         {
+            if (optimizationData.PowerPlantsToOptimize.Count == 0)
+            {
+                return;
+            }
             var doubleVector = new DoubleVector();
             DateTime dateFromString = Convert.ToDateTime(optimizationData.DateString);
             List<Prediction> predictions = CrudOperations.GetPredictions().Where(s => s.Date.Date == dateFromString.Date).ToList();
@@ -65,6 +69,7 @@ namespace OptimisationModel
             int hydroPower = 0;
             float renewableCoefficient = 1;
             int powerPlantsMinPower = 0;
+            int powerPlantMaxPower = 0;
             int renewableSources = 0;
             System.Diagnostics.Debug.WriteLine("Clouds is " + clouds + "wind is " + windSpeed);
 
@@ -80,7 +85,7 @@ namespace OptimisationModel
             {
                 if (powerPlant.Type == "Solar")
                 {
-                    int tempSunPowr= (int)((0.1  + 0.9 * (InsolationAngle * Math.Abs(1 - (clouds / 100))))  * powerPlant.MaxLoad);
+                    int tempSunPowr= (int)((0.1  + 0.9 * Math.Abs(1 - (clouds / 100)))  * powerPlant.MaxLoad*InsolationAngle);
                     sunPower += tempSunPowr;
                     optimizedData.Add(new OptimizedData { Index = optimizedData.Count, 
                         Load = tempSunPowr, 
@@ -119,7 +124,20 @@ namespace OptimisationModel
                             Type = powerPlant.Type
                         });
                     }
-                    else
+                    else if (windSpeed>22)
+                    {
+                        int tempWindPower = 0;
+                        windPower += tempWindPower;
+                        optimizedData.Add(new OptimizedData
+                        {
+                            Index = optimizedData.Count,
+                            Load = tempWindPower,
+                            Name = powerPlant.Name,
+                            OptDataPerHour = optimizedDataPerHour,
+                            Type = powerPlant.Type
+                        });
+                    }
+                    else 
                     {
                         int tempWindPower = 0;
                         windPower += tempWindPower;
@@ -155,15 +173,23 @@ namespace OptimisationModel
                 if (powerPlant.Type != "Solar" && powerPlant.Type != "Hydro" && powerPlant.Type != "Wind")
                 {
                     powerPlantsMinPower += powerPlant.MinLoad;
+                    powerPlantMaxPower += powerPlant.MaxLoad;
                 }
             }
             if (renewableSources > prediction.Predicted - powerPlantsMinPower)
             {
                 renewableCoefficient = (prediction.Predicted - powerPlantsMinPower) / renewableSources;
+                //renewableSources = (int)(renewableSources * renewableCoefficient);
+                renewableSources = 0;
+                foreach (OptimizedData pwrPlant in optimizedData)
+                {
+                    pwrPlant.Load *= renewableCoefficient;
+                    renewableSources += (int)pwrPlant.Load;
+                }
             }
-            foreach(OptimizedData pwrPlant in optimizedData)
+            if (prediction.Predicted - renewableSources > powerPlantMaxPower)
             {
-                pwrPlant.Load *= renewableCoefficient;
+                return new List<OptimizedData>();
             }
             foreach(OptimizedData opt in optimizedData)
             {
@@ -179,11 +205,40 @@ namespace OptimisationModel
             optimizedDataPerHour.LoadToOptimize = prediction.Predicted;
             if (optimizationType == "CostOptimization")
             {
-                List<OptimizedData> optData = CostOptimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted - renewableSources, optimizationData);
+                
+                float avgValueofFunctionGas;
+                float avgValueofFunctionOil;
+                float avgValueofFunctionCoal;
+                float funcsum= 0 ;
+                float number = 100;
+
+                for(int i = 0;i<100;i++)
+                {
+                    float scaledData = Scale(i, 0,99, 5, 10);
+                    funcsum += (float)(optimizationData.Multipler * ((optimizationData.Numerator * 8) / (scaledData * optimizationData.Denominator)) * optimizationData.FuelCostOil);
+                }
+                
+                avgValueofFunctionOil = funcsum / number;
+                funcsum = 0;
+                for (int i = 0; i < 100; i++)
+                {
+                    float scaledData = Scale(i, 0, 99, 5, 10);
+                    funcsum += (float)(optimizationData.Multipler * ((optimizationData.Numerator * 8) / (scaledData * optimizationData.Denominator)) * optimizationData.FuelCostGas);
+                }
+                avgValueofFunctionGas = funcsum / number;
+                funcsum = 0;
+                for (int i = 0; i < 100; i++)
+                {
+                    float scaledData = Scale(i, 0, 99, 5, 10);
+                    funcsum += (float)(optimizationData.Multipler * ((optimizationData.Numerator * 8) / (scaledData * optimizationData.Denominator)) * optimizationData.FuelCostCoal);
+                }
+                avgValueofFunctionCoal = funcsum / number;
+
+                List<OptimizedData> optData = CostOptimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted - renewableSources, optimizationData,avgValueofFunctionCoal,avgValueofFunctionGas, avgValueofFunctionOil);
                 for (int i = 0; i < notrenewablePowrPlants.Count; i++)
                 {
-                    float temp = Scale((float)optData[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 8, 16);
-                    double C02Func =  temp/5;
+                    float temp = Scale((float)optData[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 5, 10);
+                    double C02Func =  temp/8;
                     double tempC02 = Math.Pow(C02Func,2);
                     if (optData[i].Type == "Oil")
                     {
@@ -206,11 +261,46 @@ namespace OptimisationModel
                 return optimizedData;
             }else if(optimizationType == "EmmisionOptimization")
             {
-                List<OptimizedData> optData = C02Optimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted - renewableSources, optimizationData);
+
+                float avgValueofFunctionGas;
+                float avgValueofFunctionOil;
+                float avgValueofFunctionCoal;
+                float funcsum = 0;
+                float number = 100;
+
+                for (int i = 0; i < 100; i++)
+                {
+                    float scaledData = Scale(i, 0, 99, 5, 10);
+                    double C02Func = scaledData / 8;
+                    double tempC02 = Math.Pow(C02Func, 2);
+                    funcsum += (float)(((0.5 + tempC02) * optimizationData.C02EmissionOil));
+                }
+                
+                avgValueofFunctionOil = funcsum / number;
+                funcsum = 0;
+                for (int i = 0; i < 100; i++)
+                {
+                    float scaledData = Scale(i, 0, 99, 5, 10);
+                    double C02Func = scaledData / 8;
+                    double tempC02 = Math.Pow(C02Func, 2);
+                    funcsum += (float)(((0.5 + tempC02) * optimizationData.C02EmissionGas));
+                }
+                
+                avgValueofFunctionGas = funcsum / number;
+                funcsum = 0;
+                for (int i = 0; i < 100; i++)
+                {
+                    float scaledData = Scale(i, 0, 99, 5, 10);
+                    double C02Func = scaledData / 8;
+                    double tempC02 = Math.Pow(C02Func, 2);
+                    funcsum += (float)(((0.5 + tempC02) * optimizationData.C02EmissionCoal));
+                }
+                avgValueofFunctionCoal = funcsum / number;
+                List<OptimizedData> optData = C02Optimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted - renewableSources, optimizationData,avgValueofFunctionCoal,avgValueofFunctionOil, avgValueofFunctionGas);
                 for (int i = 0; i < notrenewablePowrPlants.Count; i++)
                 {
-                    float temp = Scale((float)optData[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 8, 16);
-                    double C02Func = temp/5;
+                    float temp = Scale((float)optData[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 5, 10);
+                    double C02Func = temp/8;
                     double tempC02 = Math.Pow(C02Func, 2);
                     if (optData[i].Type == "Oil")
                     {
@@ -234,12 +324,67 @@ namespace OptimisationModel
             }
             else
             {
+                float avgValueofFunctionGas;
+                float avgValueofFunctionOil;
+                float avgValueofFunctionCoal;
+                float funcsum = 0;
+                float number = 100;
+
+                for (int i = 0; i < 100; i++)
+                {
+                    float scaledData = Scale(i, 0, 99, 5, 10);
+                    funcsum += (float)(optimizationData.Multipler * ((optimizationData.Numerator * 8) / (scaledData * optimizationData.Denominator)) * optimizationData.FuelCostOil);
+                }
+                
+                avgValueofFunctionOil = funcsum / number;
+                funcsum = 0;
+                for (int i = 0; i < 100; i++)
+                {
+                    float scaledData = Scale(i, 0, 99, 5, 10);
+                    funcsum += (float)(optimizationData.Multipler * ((optimizationData.Numerator * 8) / (scaledData * optimizationData.Denominator)) * optimizationData.FuelCostGas);
+                }
+                
+                avgValueofFunctionGas = funcsum / number;
+                funcsum = 0;
+                for (int i = 0; i < 100; i++)
+                {
+                    float scaledData = Scale(i, 0, 99, 5, 10);
+                    funcsum += (float)(optimizationData.Multipler * ((optimizationData.Numerator * 8) / (scaledData * optimizationData.Denominator)) * optimizationData.FuelCostCoal);
+                }
+                avgValueofFunctionCoal = funcsum / number;
                 //weightFactor = (float)0.5;
                 float weightFC02 = 1 - weightFactor;
                 List<OptimizedData> optimizedDataCost = new List<OptimizedData>();
-                optimizedDataCost.AddRange(CostOptimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted-renewableSources, optimizationData));
+                optimizedDataCost.AddRange(CostOptimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted-renewableSources, optimizationData,avgValueofFunctionCoal,avgValueofFunctionGas,avgValueofFunctionOil));
+                funcsum = 0;
+                for (int i = 0; i < 100; i++)
+                {
+                    float scaledData = Scale(i, 0, 99, 5, 10);
+                    double C02Func = scaledData / 8;
+                    double tempC02 = Math.Pow(C02Func, 2);
+                    funcsum += (float)(((0.5 + tempC02) * optimizationData.C02EmissionOil));
+                }
+                avgValueofFunctionOil = funcsum / number;
+                funcsum = 0;
+                for (int i = 0; i < 100; i++)
+                {
+                    float scaledData = Scale(i, 0, 99, 5, 10);
+                    double C02Func = scaledData / 8;
+                    double tempC02 = Math.Pow(C02Func, 2);
+                    funcsum += (float)(((0.5 + tempC02) * optimizationData.C02EmissionGas));
+                }
+                avgValueofFunctionGas = funcsum / number;
+                funcsum = 0;
+                for (int i = 0; i < 100; i++)
+                {
+                    float scaledData = Scale(i, 0, 99, 5, 10);
+                    double C02Func = scaledData / 8;
+                    double tempC02 = Math.Pow(C02Func, 2);
+                    funcsum += (float)(((0.5 + tempC02) * optimizationData.C02EmissionCoal));
+                }
+                avgValueofFunctionCoal = funcsum / number;
                 List<OptimizedData> optimizedDataC02 = new List<OptimizedData>();
-                optimizedDataC02.AddRange(C02Optimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted - renewableSources, optimizationData));
+                optimizedDataC02.AddRange(C02Optimization(notrenewablePowrPlants, prediction, optimizedDataPerHour, prediction.Predicted - renewableSources, optimizationData, avgValueofFunctionCoal,avgValueofFunctionOil,avgValueofFunctionGas));
                 foreach(OptimizedData optData in optimizedDataCost)
                 {
                     optData.Load = optData.Load * weightFactor;
@@ -253,8 +398,8 @@ namespace OptimisationModel
                     optimizedDataCost[i].Load += optimizedDataC02[i].Load;
                 }
                 for(int i =0; i < notrenewablePowrPlants.Count; i++) {
-                    float temp = Scale((float)optimizedDataCost[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 8, 16);
-                    double C02Func = temp/5;
+                    float temp = Scale((float)optimizedDataCost[i].Load, notrenewablePowrPlants[i].MinLoad, notrenewablePowrPlants[i].MaxLoad, 5, 10);
+                    double C02Func = temp/8;
                     double tempC02 = Math.Pow(C02Func, 2);
                     if (optimizedDataCost[i].Type=="Oil")
                     {
@@ -279,7 +424,7 @@ namespace OptimisationModel
 
         }
 
-        public List<OptimizedData> CostOptimization(List<PowerPlant> powerPlants, Prediction prediction,OptimizedDataPerHour optimizedDataPerHour, float valueToOptimize, OptimizationData optimizationData)
+        public List<OptimizedData> CostOptimization(List<PowerPlant> powerPlants, Prediction prediction,OptimizedDataPerHour optimizedDataPerHour, float valueToOptimize, OptimizationData optimizationData, float coalAvg, float gasAvg, float oilAvg)
         {
             List<OptimizedData> optimizedData = new List<OptimizedData>();
             //List<OptimizedData>optimizedData = new List<OptimizedData>();
@@ -289,13 +434,13 @@ namespace OptimisationModel
                 switch (pwrPlant.Type)
                 {
                     case "Gas":
-                        costFunction.Append(-optimizationData.FuelCostGas);
+                        costFunction.Append(-gasAvg);
                         break;
                     case "Oil":
-                        costFunction.Append(-optimizationData.FuelCostOil);
+                        costFunction.Append(-oilAvg);
                         break;
                     default:
-                        costFunction.Append(-optimizationData.FuelCostCoal);
+                        costFunction.Append(-coalAvg);
                         break;
                 }
             }
@@ -336,7 +481,7 @@ namespace OptimisationModel
             }
             return optimizedData;
         }
-        public List<OptimizedData> C02Optimization(List<PowerPlant> powerPlants, Prediction prediction, OptimizedDataPerHour optimizedDataPerHour, float valueToOptimize, OptimizationData optimizationData)
+        public List<OptimizedData> C02Optimization(List<PowerPlant> powerPlants, Prediction prediction, OptimizedDataPerHour optimizedDataPerHour, float valueToOptimize, OptimizationData optimizationData, float coalAvg, float oilAvg, float gasAvg)
         {
             List<OptimizedData> optimizedData = new List<OptimizedData>();
             var costFunction = new DoubleVector();
@@ -345,13 +490,13 @@ namespace OptimisationModel
                 switch (pwrPlant.Type)
                 {
                     case "Gas":
-                        costFunction.Append(-optimizationData.C02EmissionGas);
+                        costFunction.Append(-gasAvg);
                         break;
                     case "Oil":
-                        costFunction.Append(-optimizationData.C02EmissionOil);
+                        costFunction.Append(-oilAvg);
                         break;
                     default:
-                        costFunction.Append(-optimizationData.C02EmissionCoal);
+                        costFunction.Append(-coalAvg);
                         break;
                 }
             }

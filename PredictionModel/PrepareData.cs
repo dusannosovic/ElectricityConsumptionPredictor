@@ -17,8 +17,15 @@ namespace PredictionModel
             DataTable dtWeather = dsexcelRecords.Tables["weather"];
             DataTable dtLoad = dsexcelRecords.Tables["load"];
             DateTime min = Convert.ToDateTime(dtWeather.Rows[1][0].ToString());
-            DateTime max = Convert.ToDateTime(dtWeather.Rows[dtWeather.Rows.Count-1][0].ToString());
-            Dictionary<DateTime, Tuple<DateTime, DateTime>> sunriseSunset = ParseSunsetSunrise(dsexcelRecords, min, max);
+            Dictionary<DateTime, Tuple<DateTime, DateTime>> sunriseSunset;
+            if (load)
+            {
+                DateTime max = Convert.ToDateTime(dtWeather.Rows[dtWeather.Rows.Count - 1][0].ToString());
+                sunriseSunset = ParseSunsetSunrise(dsexcelRecords, min, max);
+            }else
+            {
+                sunriseSunset = ParseSunsetSunriseNoLoad(dsexcelRecords);
+            }
             Dictionary<DateTime, Int32> Loads = new Dictionary<DateTime, int>();
             if (load)
             {
@@ -61,6 +68,23 @@ namespace PredictionModel
                 }
 
             }
+            return sunriseSunset;
+        }
+        public Dictionary<DateTime, Tuple<DateTime, DateTime>> ParseSunsetSunriseNoLoad(DataSet dsexcelRecords)
+        {
+            Dictionary<DateTime, Tuple<DateTime, DateTime>> sunriseSunset = new Dictionary<DateTime, Tuple<DateTime, DateTime>>();
+            DateTime tempDate = new DateTime(2019,5,6);
+            DataTable dataSS = dsexcelRecords.Tables["sunrise_sunset_2019"];
+            for (int i = 2; i < 28; i++)
+            {
+                DateTime minTemp = Convert.ToDateTime(dataSS.Rows[i][1]);
+                DateTime maxTemp = Convert.ToDateTime(dataSS.Rows[i][2]);
+                DateTime dtmin = new DateTime(tempDate.Year, tempDate.Month, tempDate.Day, minTemp.Hour, minTemp.Minute, minTemp.Second);
+                DateTime dtmax = new DateTime(tempDate.Year, tempDate.Month, tempDate.Day, maxTemp.Hour, maxTemp.Minute, maxTemp.Second);
+                sunriseSunset.Add(tempDate.Date, new Tuple<DateTime, DateTime>(dtmin, dtmax));
+                tempDate = tempDate.AddDays(1);
+            }
+
             return sunriseSunset;
         }
         public List<Weather> ParseWeather(DataTable dtWeather, Dictionary<DateTime, Int32> loads, bool load, Dictionary<DateTime, Tuple<DateTime,DateTime>>sunriseSunset)
